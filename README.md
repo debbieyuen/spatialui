@@ -1,4 +1,4 @@
-# Squiggly: Spatial Design and CoreML for the Apple Vision Pro 
+# Squiggly: Spatial Graphics x ML Models for the Apple Vision Pro 
 Introducing Squiggly! Squiggly is a visionOS application that explores drawing with physical utensils (crayons, pens, markers, and brushes) in immersive spaces. It is developed with RealityKit and SwiftUI in addition to the machine learning frameworks: BERT-SQuD, MNIST, and Apple's Vision Framework. This research prototype explores spatial user interfaces (UI) and graphics for 3D environments. 
 
 <img width="552" alt="Screenshot 2025-07-02 at 5 18 54 PM" src="https://github.com/user-attachments/assets/2b77bf5b-b70b-423f-a629-e9aff5d0eeba" />
@@ -6,7 +6,8 @@ Introducing Squiggly! Squiggly is a visionOS application that explores drawing w
 ## Requirements 
   * XCode, Reality Commposer, CreateML
   * Hardware: Mac (ideally a computer with an M3/M4 chip) and an Apple Vision Pro
-  * CoreML ([BERT-SQuAD](https://github.com/huggingface/transformers), [MNIST](http://yann.lecun.com/exdb/mnist/), [Vision Framework](https://developer.apple.com/documentation/vision/))
+  * CoreML ([BERT-SQuAD](https://github.com/huggingface/transformers), [MNIST](http://yann.lecun.com/exdb/mnist/))
+  * [Apple Vision Framework](https://developer.apple.com/documentation/vision/)
     
 ## Set Up
 
