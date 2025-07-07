@@ -6,10 +6,12 @@ Introducing Squiggly! Squiggly is a visionOS application that explores drawing w
 ## Requirements 
   * XCode, Reality Commposer, CreateML
   * Hardware: Mac (ideally a computer with an M3/M4 chip) and an Apple Vision Pro
-  * CoreML ([BERT-SQuAD](https://github.com/huggingface/transformers), [MNIST](http://yann.lecun.com/exdb/mnist/))
-  * [Vision Framework](https://developer.apple.com/documentation/vision/)
+  * CoreML ([BERT-SQuAD](https://github.com/huggingface/transformers), [MNIST](http://yann.lecun.com/exdb/mnist/), [Vision Framework](https://developer.apple.com/documentation/vision/))
     
 ## Set Up
+
+Install [XCode beta](https://developer.apple.com/support/install-beta/) (Version 26.0 beta 2) and visionOS beta. You will need to be running macOS Sonoma (version 14.0 or later).
+<img width="885" alt="Screenshot 2025-07-06 at 5 02 26 PM" src="https://github.com/user-attachments/assets/35808960-6607-497e-b0d9-97f7596c51e5" />
 
 Clone the repository
 ```bash
