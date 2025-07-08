@@ -4,6 +4,7 @@
 //
 //  Created by Debbie Yuen on 7/7/25.
 //  Resource: https://developer.apple.com/documentation/visionos/accessing-the-main-camera
+//  Need approval: https://developer.apple.com/documentation/visionOS/building-spatial-experiences-for-business-apps-with-enterprise-apis
 //
 
 import SwiftUI
