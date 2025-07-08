@@ -3,6 +3,7 @@
 //  squiggly
 //
 //  Created by Debbie Yuen on 7/7/25.
+//  Resource: https://developer.apple.com/documentation/visionos/accessing-the-main-camera
 //
 
 import SwiftUI
