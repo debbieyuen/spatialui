@@ -1,0 +1,3 @@
+[submodule "spatialui-ml"]
+	path = spatialui-ml
+	url = https://github.com/debbieyuen/spatialui-ml.git
