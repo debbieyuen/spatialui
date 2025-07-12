@@ -3,15 +3,48 @@
 //  squiggly
 //
 //  Created by Debbie Yuen on 7/12/25.
+//  Resource: https://developer.apple.com/documentation/visionos/creating-a-painting-space-in-visionos
+//  Resource: https://developer.apple.com/documentation/realitykit/creating-a-spatial-drawing-app-with-realitykit
 //
 
 import SwiftUI
+import RealityKit
+import ARKit
+import CoreML
 
+
+
+//import SwiftUI
+//import RealityKit
+//import ARKit
+//
 struct DrawingClassificationView: View {
+    /// The environment value to get the instance of the `OpenImmersiveSpaceAction` instance.
+    @Environment(\.openImmersiveSpace) var openImmersiveSpace
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        // Display a line of text and
+        // open a new immersive space environment.
+        Text("Painting Example")
+            .onAppear {
+                Task {
+                    await openImmersiveSpace(id: "PaintingScene")
+                }
+            }
     }
+//    var body: some View {
+//        // Build a canvas
+//        RealityView { content in
+//            let plane = ModelEntity(mesh: .generatePlane(width: 0.3, depth: 0.3))
+//            plane.model?.materials = [SimpleMaterial(color: .black, isMetallic: false)]
+//            let anchor = AnchorEntity(world: .zero)
+//            anchor.addChild(plane)
+//            content.add(anchor)
+//        }
+//    }
 }
+
+
 
 #Preview {
     DrawingClassificationView()

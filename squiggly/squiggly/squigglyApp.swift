@@ -16,5 +16,8 @@ struct squigglyApp: App {
             ContentView()
 //                .background(.black.opacity(0.8))
         }
+        ImmersiveSpace(id: "PaintingScene") {
+            PaintingView()
+        }
     }
 }
