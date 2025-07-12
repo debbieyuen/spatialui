@@ -15,7 +15,7 @@ struct PhotoClassificationView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            PhotosPicker("Choose Object", selection: $selectedItem, matching: .images)
+            PhotosPicker("Choose Image", selection: $selectedItem, matching: .images)
                 .padding()
 
             if let image = classifier.image {
