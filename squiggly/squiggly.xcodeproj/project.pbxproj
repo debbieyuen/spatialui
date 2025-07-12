@@ -52,6 +52,12 @@
 			path = squigglyTests;
 			sourceTree = "<group>";
 		};
+		8CF94F712E22E6FC00D8A74E /* FastViT-T8 */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = "FastViT-T8";
+			path = "../spatialui-ml/FastViT-T8";
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +96,7 @@
 				8C7C8F742E15F69B00340DA2 /* squigglyTests */,
 				8C1800442E1B589C00E2BC3F /* Frameworks */,
 				8C7C8F602E15F69A00340DA2 /* Products */,
+				8CF94F712E22E6FC00D8A74E /* FastViT-T8 */,
 			);
 			sourceTree = "<group>";
 		};
@@ -127,6 +134,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				8C7C8F612E15F69A00340DA2 /* squiggly */,
+				8CF94F712E22E6FC00D8A74E /* FastViT-T8 */,
 			);
 			name = squiggly;
 			packageProductDependencies = (
