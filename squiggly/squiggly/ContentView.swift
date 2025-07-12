@@ -18,28 +18,41 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            // Top-left logo and App Name
-            HStack(spacing: 8) {
-                Image("")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .clipShape(Circle()) // optional
+            // Header
+            HStack {
+                // Left Header
+                HStack {
+                    Image("yourLogoAssetName")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
 
-                Text("Squiggly App")
-                    .font(.headline)
-                    .foregroundColor(.white)
-            }.padding(16)
-            
+                    Text("Squiggly App")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+
+                Spacer()
+
+                // Right Header
+                HStack {
+                    topButton(title: "Course Website", url: "https://theapplevisionpro.vercel.app")
+                    topButton(title: "GitHub Repo", url: "https://github.com/debbieyuen/spatialui")
+//                    topButton(title: "Help", url: "https://example.com/c")
+                }
+            }
+            .padding(20)
+
             // Main Body Section
             HStack(spacing: 0) {
                 // Left side
                 VStack(alignment: .leading) {
-                    Text("Welcome to SIGGRAPH 2025 in Vancouver!")
+                    Text("Welcome to Vancouver")
                         .font(.system(size: 50, weight: .bold))
                         .padding(.bottom, 15)
                         .accessibilitySortPriority(4)
 
-                    Text("Hello").accessibilitySortPriority(3)
+                    Text("Thank you for joining our session today at SIGGRAPH Vancouver! We are excited to have you join us. Here, you will find our demo application that you may experiment with as you wish. Try modifying the code and creating your own user interfaces. Please do not hesitate to raise your hands if you have any questions.").accessibilitySortPriority(3)
                     
                     Button("Start") {
                         
@@ -55,6 +68,20 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .padding(40)
             }
+        }
+    }
+}
+
+@ViewBuilder
+func topButton(title: String, url: String) -> some View {
+    Button(action: {
+        if let link = URL(string: url) {
+            UIApplication.shared.open(link)
+        }
+    }) {
+        HStack {
+            Text(title)
+//            Image(systemName: "arrow.right")
         }
     }
 }
