@@ -52,6 +52,12 @@
 			path = squigglyTests;
 			sourceTree = "<group>";
 		};
+		8CA2353F2E24713200110994 /* Reference Objects */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = "Reference Objects";
+			path = "../spatialui-ml/Reference Objects";
+			sourceTree = SOURCE_ROOT;
+		};
 		8CF94F712E22E6FC00D8A74E /* FastViT-T8 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			name = "FastViT-T8";
@@ -91,6 +97,7 @@
 		8C7C8F562E15F69A00340DA2 = {
 			isa = PBXGroup;
 			children = (
+				8CA2353F2E24713200110994 /* Reference Objects */,
 				8C7C8F612E15F69A00340DA2 /* squiggly */,
 				8C7C8F622E15F69A00340DA2 /* Packages */,
 				8C7C8F742E15F69B00340DA2 /* squigglyTests */,
@@ -134,6 +141,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				8C7C8F612E15F69A00340DA2 /* squiggly */,
+				8CA2353F2E24713200110994 /* Reference Objects */,
 				8CF94F712E22E6FC00D8A74E /* FastViT-T8 */,
 			);
 			name = squiggly;
