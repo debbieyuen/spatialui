@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MachineLearningModelsView: View {
+    var appState: AppState
+    var immersiveSpaceIdentifier: String
     var body: some View {
         NavigationStack {
             List {
@@ -15,7 +17,7 @@ struct MachineLearningModelsView: View {
                     PhotoClassificationView()
                 }
                 NavigationLink("Object Detection with Vision and FastViT") {
-                    CrayonObjectDetectionView()
+                    CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier)
                 }
                 NavigationLink("Drawing Classification with MNIST") {
                     DrawingClassificationView()
@@ -27,6 +29,6 @@ struct MachineLearningModelsView: View {
 }
 
 #Preview {
-    MachineLearningModelsView()
+    MachineLearningModelsView(appState: AppState(), immersiveSpaceIdentifier: "Debbie from ML View")
 }
 

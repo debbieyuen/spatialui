@@ -1,9 +1,11 @@
-/*
-See the LICENSE.txt file for this sample’s licensing information.
-
-Abstract:
-Extensions and utilities.
-*/
+//
+//  ReferenceObjectLoader.swift
+//  squiggly
+//
+//  Created by Debbie Yuen on 7/13/25.
+//  Resources: https://developer.apple.com/documentation/visionos/exploring_object_tracking_with_arkit
+//  https://www.youtube.com/watch?v=NaB_6hLzYN0&t=151s
+//
 
 import RealityKit
 import UIKit

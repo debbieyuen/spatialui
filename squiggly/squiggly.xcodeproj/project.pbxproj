@@ -269,6 +269,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Needed for ARKit";
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -298,6 +299,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Needed for ARKit";
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				LD_RUNPATH_SEARCH_PATHS = (

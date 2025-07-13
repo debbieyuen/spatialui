@@ -4,6 +4,12 @@
 <dict>
 	<key></key>
 	<string></string>
+	<key>NSHandsTrackingUsageDescription</key>
+	<string>We use hand tracking to let you draw in space.</string>
+	<key>NSMainCameraUsageDescription</key>
+	<string>We access the camera to support AR and spatial features.</string>
+	<key>NSWorldSensingUsageDescription</key>
+	<string>We use world sensing to position your drawings accurately.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
@@ -13,12 +19,5 @@
 		<key>UISceneConfigurations</key>
 		<dict/>
 	</dict>
-    
-    <key>NSHandsTrackingUsageDescription</key>
-    <string>We use hand tracking to let you draw in space.</string>
-    <key>NSWorldSensingUsageDescription</key>
-    <string>We use world sensing to position your drawings accurately.</string>
-    <key>NSMainCameraUsageDescription</key>
-    <string>We access the camera to support AR and spatial features.</string>
 </dict>
 </plist>

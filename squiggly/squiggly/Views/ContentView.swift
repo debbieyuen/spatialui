@@ -15,6 +15,9 @@ struct ContentView: View {
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     // Grab image file for the Vision Framework
     @State private var imageFile: ImageFile? = nil
+    // Appstate() for object detection
+    @State private var appState = AppState()
+    private let immersiveSpaceIdentifier = "Debbie Object Tracking"
 
     var body: some View {
         NavigationStack {
@@ -55,7 +58,7 @@ struct ContentView: View {
 
                         Text("Thank you for joining our session today at SIGGRAPH Vancouver! We are excited to have you join us. Here, you will find our demo application that you may experiment with as you wish. Try modifying the code and creating your own user interfaces. Please do not hesitate to raise your hands if you have any questions.").accessibilitySortPriority(3)
                         
-                        NavigationLink(destination: MachineLearningModelsView()) {
+                        NavigationLink(destination: MachineLearningModelsView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier)) {
                             Text("Start")
                         }
                         .padding(.top)
