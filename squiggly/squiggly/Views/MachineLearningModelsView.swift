@@ -82,9 +82,12 @@ struct MachineLearningModelsView: View {
                 .frame(maxHeight: .infinity)
 
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 20) {
+                    HStack(spacing: 60) {
                         ForEach(modelItems) { item in
                             NavigationLink(destination: item.destinationView) {
+                                Image(systemName: item.systemImage)
+                                        .font(.largeTitle)
+                                        .padding(.bottom)
                                 VStack(alignment: .leading) {
                                     Text(item.title).font(.headline)
                                     Text(item.subtitle).font(.subheadline)
@@ -116,6 +119,7 @@ struct MachineLearningModelsView: View {
         let title: String
         let subtitle: String
         let modelName: String
+        let systemImage: String
         let destinationView: AnyView
     }
 
@@ -126,24 +130,28 @@ struct MachineLearningModelsView: View {
                 title: "Photo Classification",
                 subtitle: "Classify images from your photo library using Apple's built-in Vision framework and FastViT.",
                 modelName: "Earth",
+                systemImage: "photo.on.rectangle",
                 destinationView: AnyView(PhotoClassificationView())
             ),
             ModelItem(
                 title: "3D Object Detection",
                 subtitle: "Detect physical drawing tools like crayon boxes using Apple's built-in Vision framework.",
                 modelName: "CrayonBoxModel",
+                systemImage: "cube.transparent",
                 destinationView: AnyView(CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier))
             ),
             ModelItem(
                 title: "Drawing Classification",
                 subtitle: "Read and analyze text with BertSquaD model.Read and analyze text with BertSquaD",
                 modelName: "CrayonBoxModel",
+                systemImage: "pencil.and.outline",
                 destinationView: AnyView(DrawingClassificationView())
             ),
             ModelItem(
                 title: "Text Classification",
                 subtitle: "Read and analyze text with BertSquaD model.Read and analyze text with BertSquaD",
                 modelName: "MNISTModel",
+                systemImage: "text.alignleft",
                 destinationView: AnyView(DrawingClassificationView())
             )
         ]
