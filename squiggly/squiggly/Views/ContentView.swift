@@ -75,6 +75,10 @@ struct ContentView: View {
                     .padding(40)
                 }
             }
+        }.task {
+            if appState.allRequiredProvidersAreSupported {
+                await appState.referenceObjectLoader.loadBuiltInReferenceObjects()
+            }
         }
     }
 }
