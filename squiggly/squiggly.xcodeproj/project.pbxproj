@@ -26,6 +26,7 @@
 		8C7C8F5F2E15F69A00340DA2 /* squiggly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = squiggly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7C8F632E15F69A00340DA2 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		8C7C8F712E15F69B00340DA2 /* squigglyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = squigglyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8CA235A62E24BE7A00110994 /* RealityKitCrayonBoxContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitCrayonBoxContent; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -119,6 +120,7 @@
 		8C7C8F622E15F69A00340DA2 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				8CA235A62E24BE7A00110994 /* RealityKitCrayonBoxContent */,
 				8C7C8F632E15F69A00340DA2 /* RealityKitContent */,
 			);
 			path = Packages;
