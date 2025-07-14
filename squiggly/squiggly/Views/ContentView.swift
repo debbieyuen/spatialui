@@ -69,10 +69,19 @@ struct ContentView: View {
 
                     // Right Side
                     VStack {
-                            Model3D(named: "Scene", bundle: realityKitContentBundle)
+                        RealityView { content in
+                            if let entity = try? await Entity(named: "PinkPixel22", in: realityKitContentBundle) {
+                                entity.scale = SIMD3<Float>(repeating: 0.65)
+                                entity.position.y += 0.1   // move up 0.2 meters
+                                entity.position.x -= 0.03   // move left 0.1 meters (negative X is left)
+                                entity.position.z -= 0.1
+                                content.add(entity)
+                            }
+                        }
+
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    .padding(40)
+                    .padding(50)
                 }
             }
         }.task {

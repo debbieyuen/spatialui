@@ -9,7 +9,7 @@
       [
         "0A9B4653-B11E-4D6A-850E-C6FCB621626C",
         "Root",
-        "Sphere"
+        "GridMaterial"
       ],
       {
         "isExpanded" : true,
@@ -26,7 +26,7 @@
       [
         "0A9B4653-B11E-4D6A-850E-C6FCB621626C",
         "Root",
-        "GridMaterial"
+        "Sphere"
       ],
       {
         "isExpanded" : true,
@@ -44,6 +44,26 @@
       [
         "26DBAE76-5DD8-47B6-A085-1B4ADA111097",
         "Root",
+        "PinkPixel16_glb",
+        "Scenes"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "26DBAE76-5DD8-47B6-A085-1B4ADA111097",
+        "Root",
+        "PinkPixel16_glb_1",
+        "Scenes"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "26DBAE76-5DD8-47B6-A085-1B4ADA111097",
+        "Root",
         "Sphere"
       ],
       {
@@ -53,7 +73,28 @@
       },
       [
         "26DBAE76-5DD8-47B6-A085-1B4ADA111097",
+        "Root",
+        "PinkPixel16_glb_1",
+        "Scenes",
+        "Scene"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "26DBAE76-5DD8-47B6-A085-1B4ADA111097",
         "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "26DBAE76-5DD8-47B6-A085-1B4ADA111097",
+        "Root",
+        "PinkPixel23_2",
+        "Pixel_3D"
       ],
       {
         "isExpanded" : true,
