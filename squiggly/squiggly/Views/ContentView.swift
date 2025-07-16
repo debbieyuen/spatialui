@@ -16,8 +16,10 @@ struct ContentView: View {
     // Grab image file for the Vision Framework
 //    @State private var imageFile: ImageFile? = nil
     // Appstate() for object detection
-    @State private var appState = AppState()
-    private let immersiveSpaceIdentifier = "Debbie Object Tracking"
+//    @State private var appState = AppState()
+//    private let immersiveSpaceIdentifier = UIIdentifier.immersiveSpace
+    @Bindable var appState: AppState
+    let immersiveSpaceIdentifier: String
 
     var body: some View {
         NavigationStack {
@@ -58,7 +60,8 @@ struct ContentView: View {
 
                         Text("Thank you for joining our session today at SIGGRAPH Vancouver! We are excited to have you join us. Here, you will find our demo application that you may experiment with as you wish. Try modifying the code and creating your own user interfaces. Please do not hesitate to raise your hands if you have any questions.").accessibilitySortPriority(3)
                         
-                        NavigationLink(destination: MachineLearningModelsView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier)) {
+                        NavigationLink(destination:
+                                        MachineLearningModelsView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier)) {
                             Text("Start")
                         }
                         .padding(.top)
@@ -84,7 +87,9 @@ struct ContentView: View {
                     .padding(50)
                 }
             }
-        }.task {
+        }
+        
+        .task {
             if appState.allRequiredProvidersAreSupported {
                 await appState.referenceObjectLoader.loadBuiltInReferenceObjects()
             }
@@ -107,6 +112,6 @@ func topButton(title: String, url: String) -> some View {
 }
 
 #Preview(windowStyle: .automatic) {
-    ContentView()
+    ContentView(appState: AppState(), immersiveSpaceIdentifier: UIIdentifier.immersiveSpace)
 }
 

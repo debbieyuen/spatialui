@@ -69,6 +69,8 @@ import RealityKitContent
 
 struct MachineLearningModelsView: View {
     @State private var selectedModelName: String = "Earth" // default model
+    var appState: AppState
+    var immersiveSpaceIdentifier: String
 
     var body: some View {
         NavigationStack {
@@ -138,7 +140,7 @@ struct MachineLearningModelsView: View {
                 subtitle: "Detect physical drawing tools like crayon boxes using Apple's built-in Vision framework.",
                 modelName: "CrayonBoxModel",
                 systemImage: "cube.transparent",
-                destinationView: AnyView(CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier))
+                destinationView: AnyView(CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: UIIdentifier.immersiveSpace))
             ),
             ModelItem(
                 title: "Drawing Classification",
@@ -156,12 +158,9 @@ struct MachineLearningModelsView: View {
             )
         ]
     }
-
-    var appState: AppState
-    var immersiveSpaceIdentifier: String
 }
 
 #Preview {
-    MachineLearningModelsView(appState: AppState(), immersiveSpaceIdentifier: "Debbie from ML View")
+    MachineLearningModelsView(appState: AppState(), immersiveSpaceIdentifier: UIIdentifier.immersiveSpace)
 }
 
