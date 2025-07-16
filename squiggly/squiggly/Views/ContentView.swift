@@ -14,7 +14,7 @@ struct ContentView: View {
     // Call openImmersive Space to create a space to run ARKit session
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     // Grab image file for the Vision Framework
-    @State private var imageFile: ImageFile? = nil
+//    @State private var imageFile: ImageFile? = nil
     // Appstate() for object detection
     @State private var appState = AppState()
     private let immersiveSpaceIdentifier = "Debbie Object Tracking"
@@ -69,15 +69,15 @@ struct ContentView: View {
 
                     // Right Side
                     VStack {
-                        RealityView { content in
-                            if let entity = try? await Entity(named: "PinkPixel22", in: realityKitContentBundle) {
-                                entity.scale = SIMD3<Float>(repeating: 0.65)
-                                entity.position.y += 0.1   // move up 0.2 meters
-                                entity.position.x -= 0.03   // move left 0.1 meters (negative X is left)
-                                entity.position.z -= 0.1
-                                content.add(entity)
-                            }
-                        }
+//                        RealityView { content in
+//                            if let entity = try? await Entity(named: "PinkPixel22", in: realityKitContentBundle) {
+//                                entity.scale = SIMD3<Float>(repeating: 0.65)
+//                                entity.position.y += 0.1   // move up 0.2 meters
+//                                entity.position.x -= 0.03   // move left 0.1 meters (negative X is left)
+//                                entity.position.z -= 0.1
+//                                content.add(entity)
+//                            }
+//                        }
 
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
