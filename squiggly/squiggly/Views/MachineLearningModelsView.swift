@@ -1,67 +1,9 @@
-////
-////  MachineLearningModelsView.swift
-////  squiggly
-////
-////  Created by Debbie Yuen on 7/11/25.
-////
 //
-//import SwiftUI
-//import RealityKit
-//import RealityKitContent
+//  MachineLearningModelsView.swift
+//  squiggly
 //
-//struct MachineLearningModelsView: View {
-//    @State private var selectedModelName: String = "EarthModel"
-//    var appState: AppState
-//    var immersiveSpaceIdentifier: String
-//    
-//    var body: some View {
-//        NavigationStack {
-//            // Top 2/3: 3D Model Preview
-//            Model3D(named: "Scene", bundle: realityKitContentBundle)
-//            RealityView { content in
-//                if let entity = try? await Entity(named: selectedModelName) {
-//                    content.add(entity)
-//                }
-//            }
-//            .frame(maxHeight: .infinity)
-//            
-//            List {
-//                NavigationLink(destination: PhotoClassificationView()) {
-//                    VStack(alignment: .leading) {
-//                        Text("Photo Classification")
-//                            .font(.headline)
-//                        Text("Classify images from your photo gallery with PhotoUI and the Vision Framework.")
-//                            .font(.subheadline)
-//                            .foregroundColor(.gray)
-//                    }
-//                }
-//                NavigationLink(destination: CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier)) {
-//                    VStack(alignment: .leading) {
-//                        Text("Object Detection with Vision and FastViT")
-//                            .font(.headline)
-//                        Text("Detect objects drawing materials such as crayon boxes and display 3D UI.")
-//                            .font(.subheadline)
-//                            .foregroundColor(.gray)
-//                    }
-//                }
-//                
-//                NavigationLink(destination: DrawingClassificationView()) {
-//                    VStack(alignment: .leading) {
-//                        Text("Drawing Classification with MNIST")
-//                            .font(.headline)
-//                        Text("Classify drawn digits using MNIST model.")
-//                            .font(.subheadline)
-//                            .foregroundColor(.gray)
-//                    }
-//                }
-//            }
-//            .navigationTitle("Explore Machine Learning Models")
-//        }
+//  Created by Debbie Yuen on 7/11/25.
 //
-//    }
-//}
-//
-
 
 import SwiftUI
 import RealityKit
@@ -140,16 +82,7 @@ struct MachineLearningModelsView: View {
                 subtitle: "Detect physical drawing tools like crayon boxes using Apple's built-in Vision framework.",
                 modelName: "CrayonBoxModel",
                 systemImage: "cube.transparent",
-//                destinationView: AnyView(DrawingAndObjectDetectionView(appState: appState, immersiveSpaceIdentifier: UIIdentifier.combinedSpace))
                 destinationView: AnyView(CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: UIIdentifier.immersiveSpace))
-//                destinationView: AnyView(DrawingClassificationView())
-            ),
-            ModelItem(
-                title: "Drawing Classification",
-                subtitle: "Read and analyze text with BertSquaD model.Read and analyze text with BertSquaD",
-                modelName: "CrayonBoxModel",
-                systemImage: "pencil.and.outline",
-                destinationView: AnyView(PhotoClassificationView())
             ),
             ModelItem(
                 title: "Text Classification",

@@ -11,11 +11,6 @@ import RealityKit
 import UniformTypeIdentifiers
 
 struct CrayonObjectDetectionView: View {
-//    var appState: AppState
-//    var immersiveSpaceIdentifier: String
-//    var body: some View {
-//        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-//    }
     @Bindable var appState: AppState
     let immersiveSpaceIdentifier: String
     
