@@ -11,4 +11,5 @@ import Foundation
 enum UIIdentifier {
     static let paintingScene = "PaintingScene"
     static let immersiveSpace = "Object tracking"
+    static let combinedSpace = "DrawObject"
 }

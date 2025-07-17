@@ -140,21 +140,23 @@ struct MachineLearningModelsView: View {
                 subtitle: "Detect physical drawing tools like crayon boxes using Apple's built-in Vision framework.",
                 modelName: "CrayonBoxModel",
                 systemImage: "cube.transparent",
+//                destinationView: AnyView(DrawingAndObjectDetectionView(appState: appState, immersiveSpaceIdentifier: UIIdentifier.combinedSpace))
                 destinationView: AnyView(CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: UIIdentifier.immersiveSpace))
+//                destinationView: AnyView(DrawingClassificationView())
             ),
             ModelItem(
                 title: "Drawing Classification",
                 subtitle: "Read and analyze text with BertSquaD model.Read and analyze text with BertSquaD",
                 modelName: "CrayonBoxModel",
                 systemImage: "pencil.and.outline",
-                destinationView: AnyView(DrawingClassificationView())
+                destinationView: AnyView(PhotoClassificationView())
             ),
             ModelItem(
                 title: "Text Classification",
                 subtitle: "Read and analyze text with BertSquaD model.Read and analyze text with BertSquaD",
                 modelName: "MNISTModel",
                 systemImage: "text.alignleft",
-                destinationView: AnyView(DrawingClassificationView())
+                destinationView: AnyView(PhotoClassificationView())
             )
         ]
     }

@@ -10,25 +10,24 @@ import SwiftUI
 
 @main
 struct squigglyApp: App {
+    
     // AppState for Object Detection Views
     @State private var appState = AppState()
     
     var body: some Scene {
-        WindowGroup {
-            // Change opacity
-            ContentView(
-                appState: appState,
-                immersiveSpaceIdentifier: UIIdentifier.immersiveSpace
-            )
-//                .background(.black.opacity(0.8))
-        }
-        ImmersiveSpace(id: UIIdentifier.paintingScene) {
-            PaintingView()
-        }
-        
-        // Immersive Space for object tracking
-                       ImmersiveSpace(id: UIIdentifier.immersiveSpace) {
-            ObjectTrackingRealityView(appState: appState)
-        }
+            WindowGroup {
+                ContentView(
+                    appState: appState,
+                    immersiveSpaceIdentifier: UIIdentifier.immersiveSpace
+                )
+            }
+//            ImmersiveSpace(id: UIIdentifier.paintingScene) {
+//                PaintingView()
+//            }
+//            
+            ImmersiveSpace(id: UIIdentifier.immersiveSpace) {
+                CombinedRealityView(appState: appState)
+            }
     }
 }
+
