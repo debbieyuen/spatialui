@@ -28,6 +28,7 @@ struct CombinedRealityView: View {
     // Holding Crayon
     @State private var isPinchInRange = false
     @State private var holdFrameCount = 0
+    let holdFrameTreshold = 7
     
     // Overlay  UI
     @State private var showPrompt = false
@@ -142,14 +143,21 @@ struct CombinedRealityView: View {
 //                                               (indexMiddleDistance < maxIndexMiddle)
                         
                         if isHoldCrayon {
-                               lastIndexPose = indexPos
-                               isPinchInRange = true
-                               print("\(timestamp)Holding crayon detected, drawing ON")
+                            holdFrameCount += 1
+                            print("\(timestamp) Hold frame count: \(holdFrameCount)")
+                            if holdFrameCount >= holdFrameTreshold {
+                                lastIndexPose = indexPos
+                                isPinchInRange = true
+                                print("\(timestamp) Holding crayon detected, drawing ON \(holdFrameCount)")
+                            }
+                            
+                               
                            } else if isPinch {
                                isPinchInRange = false
                                lastIndexPose = nil
                                print("\(timestamp)Just pinch (no crayon hold), drawing OFF")
                            } else {
+                               holdFrameCount = 0
                                isPinchInRange = false
                                lastIndexPose = nil
                                print("\(timestamp)No recognized gesture, drawing OFF")
