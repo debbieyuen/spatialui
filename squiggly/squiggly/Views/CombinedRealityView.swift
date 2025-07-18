@@ -27,6 +27,7 @@ struct CombinedRealityView: View {
     
     // Holding Crayon
     @State private var isPinchInRange = false
+    @State private var holdFrameCount = 0
     
     // Overlay  UI
     @State private var showPrompt = false
@@ -93,28 +94,79 @@ struct CombinedRealityView: View {
 
                     for anchor in anchors {
                         guard let handSkeleton = anchor.handSkeleton else { continue }
-
+                        
+                        // joint positions
                         let thumbPos = (anchor.originFromAnchorTransform * handSkeleton.joint(.thumbTip).anchorFromJointTransform).translation()
                         let indexPos = (anchor.originFromAnchorTransform * handSkeleton.joint(.indexFingerTip).anchorFromJointTransform).translation()
-
-                        let minPinchThreshold: Float = 0.015
-                        let maxPinchThreshold: Float = 0.03
-                        let pinchDistance = length(thumbPos - indexPos)
+                        let middlePos = (anchor.originFromAnchorTransform * handSkeleton.joint(.middleFingerTip).anchorFromJointTransform).translation()
+                        
+                        // finger curl positions
+                        let middleBasePos = (anchor.originFromAnchorTransform * handSkeleton.joint(.middleFingerMetacarpal).anchorFromJointTransform).translation()
+                        let middleTipVector = middlePos - middleBasePos
+                        let middleDirection = normalize(middleTipVector)
+                        let palmNormal = SIMD3<Float>(0, 1, 0)  // upward, adjust if needed
+                        let angle = acos(dot(middleDirection, palmNormal))
+                        
+                        // curl thresholds
+                        let maxMiddleCurlAngle: Float = .pi / 4  // 45 degrees
+                        let isMiddleExtended = angle > maxMiddleCurlAngle
+                        
+                        // thresholds in meters
+//                        let minPinchThreshold: Float = 0.015
+//                        let maxPinchThreshold: Float = 0.03
+                        let minThumbIndex: Float = 0.005
+                        let maxThumbIndex: Float = 0.022
+                        let maxThumbMiddle: Float = 0.045
+                        let maxIndexMiddle: Float = 0.045
+                        
+                        // calculate the distances
+//                        let pinchDistance = length(thumbPos - indexPos)
+                        let thumbIndexDistance = length(thumbPos - indexPos)
+                        let thumbMiddleDistance = length(thumbPos - middlePos)
+                        let indexMiddleDistance = length(indexPos - middlePos)
                         //Print the measured pinch distance (in meters and cm)
-                        print("👉 Pinch distance (m):", pinchDistance, "| (cm):", pinchDistance * 100)
+                        print("Thumb-Index:", thumbIndexDistance, "| Thumb-Middle:", thumbMiddleDistance, "| Index-Middle:", indexMiddleDistance)
+                        
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "mm:ss.SSS"
                         let timestamp = dateFormatter.string(from: Date())
                         
-                        if (pinchDistance > minPinchThreshold) && (pinchDistance < maxPinchThreshold) {
-                            lastIndexPose = indexPos
-                            isPinchInRange = true
-                            print("\(timestamp) | Pinch in range → distance (m):", pinchDistance, "| (cm):", pinchDistance * 100)
-                        } else {
-                            isPinchInRange = false
-                            lastIndexPose = nil
-                            print("\(timestamp) |  Pinch out of range → distance (m):", pinchDistance, "| (cm):", pinchDistance * 100)
-                        }
+                        // Define gesture conditions
+                            let isPinch = (thumbIndexDistance > minThumbIndex) && (thumbIndexDistance < maxThumbIndex)
+                            let isHoldCrayon = isPinch &&
+                                           (thumbMiddleDistance < maxThumbMiddle) &&
+                                           (indexMiddleDistance < maxIndexMiddle) &&
+                                           isMiddleExtended
+//                            let isHoldCrayon = isPinch &&
+//                                               (thumbMiddleDistance < maxThumbMiddle) &&
+//                                               (indexMiddleDistance < maxIndexMiddle)
+                        
+                        if isHoldCrayon {
+                               lastIndexPose = indexPos
+                               isPinchInRange = true
+                               print("\(timestamp)Holding crayon detected, drawing ON")
+                           } else if isPinch {
+                               isPinchInRange = false
+                               lastIndexPose = nil
+                               print("\(timestamp)Just pinch (no crayon hold), drawing OFF")
+                           } else {
+                               isPinchInRange = false
+                               lastIndexPose = nil
+                               print("\(timestamp)No recognized gesture, drawing OFF")
+                           }
+                        
+                        // crayon detected. should be a holding a crayon kind of pinch not a pinch
+//                        if (pinchDistance > minPinchThreshold) && (pinchDistance < maxPinchThreshold) &&
+//                            (thumbMiddleDistance < maxThumbMiddle) && (indexMiddleDistance < maxIndexMiddle)
+//{
+//                            lastIndexPose = indexPos
+//                            isPinchInRange = true
+//                            print("\(timestamp) | Pinch in range → distance (m):", pinchDistance, "| (cm):", pinchDistance * 100)
+//                        } else {
+//                            isPinchInRange = false
+//                            lastIndexPose = nil
+//                            print("\(timestamp) |  Pinch out of range → distance (m):", pinchDistance, "| (cm):", pinchDistance * 100)
+//                        }
                     }
                 }))
             } attachments: {
