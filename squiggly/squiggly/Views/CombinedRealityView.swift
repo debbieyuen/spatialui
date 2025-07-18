@@ -101,7 +101,7 @@ struct CombinedRealityView: View {
                         let maxPinchThreshold: Float = 0.03
                         let pinchDistance = length(thumbPos - indexPos)
                         //Print the measured pinch distance (in meters and cm)
-                        print("Pinch distance (m):", pinchDistance, "| (cm):", pinchDistance * 100)
+                        print("👉 Pinch distance (m):", pinchDistance, "| (cm):", pinchDistance * 100)
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "mm:ss.SSS"
                         let timestamp = dateFormatter.string(from: Date())
