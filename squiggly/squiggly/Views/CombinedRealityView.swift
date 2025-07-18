@@ -3,6 +3,7 @@
 //  squiggly
 //
 //  Created by Debbie Yuen on 7/16/25.
+//  Resource: https://developer.apple.com/documentation/visionos/using-a-reference-object-with-realitykit
 //
 
 import SwiftUI
@@ -28,7 +29,15 @@ struct CombinedRealityView: View {
     @State private var showPrompt = false
 
     var body: some View {
-            RealityView { content in
+            RealityView { content, attachments in
+                // Find the URL of the reference object file.
+                            let objectURL = Bundle.main.url(forResource: "Crayon Box_full_ObjectMaskOn", withExtension: ".referenceobject")!
+                
+                // Create an object-anchoring entity.
+                            let anchorSource = AnchoringComponent.ObjectAnchoringSource(objectURL)
+                            let objectAnchor = AnchorEntity(.referenceObject(from: anchorSource))
+                            content.add(objectAnchor)
+                
                 content.add(root)
                 
                 // Add painting canvas
@@ -53,28 +62,11 @@ struct CombinedRealityView: View {
                             self.objectVisualizations[id] = visualization
                             root.addChild(visualization.entity)
                             
-                            // Display overlay UI
-                            if anchor.referenceObject.name == "Crayon Box_full_ObjectMaskOn" && !showPrompt {
-                                showPrompt = true
-                            }
-                            
-                            let textMesh = MeshResource.generateText(
-                                "Please open the box",
-                                extrusionDepth: 0.01,
-                                font: .systemFont(ofSize: 0.1),
-                                containerFrame: .zero,
-                                alignment: .center,
-                                lineBreakMode: .byWordWrapping
-                            )
-
-                            var material = SimpleMaterial()
-                            material.color = .init(tint: .white, texture: nil)
-
-                            let textEntity = ModelEntity(mesh: textMesh, materials: [material])
-                            textEntity.transform.translation = [0, 0.1, 0]  // slightly above anchor
-
-                            visualization.entity.addChild(textEntity)
-                            
+                            // Display UI
+                            // Add an attachment to the object anchor.
+                                    if let attachment = attachments.entity(for: "CrayonBoxLabel") {
+                                        objectAnchor.addChild(attachment)
+                                    }
                         case .updated:
                             objectVisualizations[id]?.update(with: anchor)
                             
@@ -108,18 +100,40 @@ struct CombinedRealityView: View {
                         }
                     }
                 }))
+            } attachments: {
+                Attachment(id: "CrayonBoxLabel") {
+                    Button () {} label: {
+                    Label("Tap Globe for Lunar Orbit", systemImage: "moon.circle")
+                    }
+//                    Text("Open the crayon box")
+//                        .font(.title)
+//                        .padding()
+//                        .background(.thinMaterial)
+//                        .cornerRadius(12)
+                }
             }
+
         .gesture(
+            TapGesture()
+                .targetedToAnyEntity()
+                .onEnded { value in
+                    if value.entity.name == "OpenCrayonBoxButton" {
+                        print("Open Crayon Box image button tapped")
+                        // Take out pink crayon
+                    }
+                }
+        )
+        .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .targetedToAnyEntity()
-                .onChanged({ _ in
+                .onChanged { _ in
                     if let pos = lastIndexPose {
                         canvas.addPoint(pos)
                     }
-                })
-                .onEnded({ _ in
+                }
+                .onEnded { _ in
                     canvas.finishStroke()
-                })
+                }
         )
         .onAppear {
             print("Entering immersive space.")
@@ -136,5 +150,6 @@ struct CombinedRealityView: View {
             
             appState.didLeaveImmersiveSpace()
         }
+        
     }
 }

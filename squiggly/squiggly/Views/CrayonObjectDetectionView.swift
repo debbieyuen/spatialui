@@ -205,6 +205,6 @@ struct CrayonObjectDetectionView: View {
     }
 }
 
-#Preview {
-    CrayonObjectDetectionView(appState: AppState(), immersiveSpaceIdentifier: "immersiveSpaceIdentifier")
-}
+//#Preview {
+//    CrayonObjectDetectionView(appState: AppState(), immersiveSpaceIdentifier: "immersiveSpaceIdentifier")
+//}
