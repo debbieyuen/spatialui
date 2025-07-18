@@ -26,6 +26,10 @@ struct CombinedRealityView: View {
     @State var canvas = PaintingCanvas()
     @State var lastIndexPose: SIMD3<Float>?
     
+    // Hold Crayon and factor out random pinches
+    @State private var holdFrameCount = 0
+    let holdFrameTreshold = 7
+    
     // Overlay  UI
     @State private var showPrompt = false
 
@@ -125,7 +129,13 @@ struct CombinedRealityView: View {
                 .onChanged { _ in
                     if let pos = lastIndexPose {
                         if isPinkCrayonDetected {
-                            canvas.addPoint(pos)
+                            holdFrameCount += 1
+                            print("❤️ First Hold frame count: \(holdFrameCount)")
+                            if holdFrameCount >= holdFrameTreshold {
+                                canvas.addPoint(pos)
+                                print("💕 Hold frame count: \(holdFrameCount)")
+                            }
+                            
                         }
                     }
                 }
