@@ -13,7 +13,7 @@ import ARKit
 @MainActor
 struct CombinedRealityView: View {
     var appState: AppState
-
+    
     // Root entity
     var root = Entity()
     
@@ -32,97 +32,89 @@ struct CombinedRealityView: View {
     
     // Overlay  UI
     @State private var showPrompt = false
-
+    
     var body: some View {
-            RealityView { content, attachments in
-                // Find the URL of the reference object file.
-                            let objectURL = Bundle.main.url(forResource: "Crayon Box_full_ObjectMaskOn", withExtension: ".referenceobject")!
+        RealityView { content, attachments in
+            content.add(root)
+            
+            // Add painting canvas
+            root.addChild(canvas.root)
+            
+            // Object Tracking Task
+            Task {
+                let objectTracking = await appState.startTracking()
+                guard let objectTracking else { return }
                 
-                // Create an object-anchoring entity.
-                            let anchorSource = AnchoringComponent.ObjectAnchoringSource(objectURL)
-                            let objectAnchor = AnchorEntity(.referenceObject(from: anchorSource))
-                            content.add(objectAnchor)
-                
-                content.add(root)
-                
-                // Add painting canvas
-                root.addChild(canvas.root)
-                
-                // Object Tracking Task
-                Task {
-                    let objectTracking = await appState.startTracking()
-                    guard let objectTracking else { return }
-
-                    for await anchorUpdate in objectTracking.anchorUpdates {
-                        let anchor = anchorUpdate.anchor
-                        let id = anchor.id
-                        
-                        switch anchorUpdate.event {
-                        case .added:
-                            print("Anchor transform for \(anchor.referenceObject.name):")
-                            print(anchor.originFromAnchorTransform)
-                            
-                            // Check for Pink Crayon
-                            if anchor.referenceObject.name == "PinkCrayon" {
-                                isPinkCrayonDetected = true
-                                print("🎨 Pink crayon detected. drawing unlocked")
+                for await anchorUpdate in objectTracking.anchorUpdates {
+                    let anchor = anchorUpdate.anchor
+                    let id = anchor.id
+                    let objectName = anchor.referenceObject.name
+                    
+                    switch anchorUpdate.event {
+                    case .added:
+                        let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
+                        let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
+                        self.objectVisualizations[id] = visualization
+                        root.addChild(visualization.entity)
+                        // Attach specific UI based on the object
+                        if objectName == "Crayon Box_full_ObjectMaskOn" {
+                            print("📦 Crayon Box detected")
+                            if let attachment = attachments.entity(for: "CrayonBoxLabel") {
+                                visualization.entity.addChild(attachment)
                             }
-                            let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
-                            let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
-                            self.objectVisualizations[id] = visualization
-                            root.addChild(visualization.entity)
-                            
-                            // Display UI
-                            // Add an attachment to the object anchor.
-                                    if let attachment = attachments.entity(for: "CrayonBoxLabel") {
-                                        objectAnchor.addChild(attachment)
-                                    }
-                        case .updated:
-                            objectVisualizations[id]?.update(with: anchor)
-                            
-                        case .removed:
-                            objectVisualizations[id]?.entity.removeFromParent()
-                            objectVisualizations.removeValue(forKey: id)
+                        } else if objectName == "PinkCrayon" {
+                            print("🖍️ Pink Crayon detected — drawing unlocked")
+                            isPinkCrayonDetected = true
+                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
+                                visualization.entity.addChild(attachment)
+                            }
                         }
+                    case .updated:
+                        objectVisualizations[id]?.update(with: anchor)
+                        
+                    case .removed:
+                        objectVisualizations[id]?.entity.removeFromParent()
+                        objectVisualizations.removeValue(forKey: id)
                     }
-                }
-
-                // Painting Hand Tracking Closure
-                root.components.set(ClosureComponent(closure: { deltaTime in
-                    var anchors = [HandAnchor]()
-
-                    if let latestLeftHand = paintingHandTracking.latestLeftHand {
-                        anchors.append(latestLeftHand)
-                    }
-                    if let latestRightHand = paintingHandTracking.latestRightHand {
-                        anchors.append(latestRightHand)
-                    }
-
-                    for anchor in anchors {
-                        guard let handSkeleton = anchor.handSkeleton else { continue }
-
-                        let thumbPos = (anchor.originFromAnchorTransform * handSkeleton.joint(.thumbTip).anchorFromJointTransform).translation()
-                        let indexPos = (anchor.originFromAnchorTransform * handSkeleton.joint(.indexFingerTip).anchorFromJointTransform).translation()
-
-                        let pinchThreshold: Float = 0.05
-                        if length(thumbPos - indexPos) < pinchThreshold {
-                            lastIndexPose = indexPos
-                        }
-                    }
-                }))
-            } attachments: {
-                Attachment(id: "CrayonBoxLabel") {
-                    Button () {} label: {
-                    Label("Tap Globe for Lunar Orbit", systemImage: "moon.circle")
-                    }
-//                    Text("Open the crayon box")
-//                        .font(.title)
-//                        .padding()
-//                        .background(.thinMaterial)
-//                        .cornerRadius(12)
                 }
             }
-
+            
+            // Painting Hand Tracking Closure
+            root.components.set(ClosureComponent(closure: { deltaTime in
+                var anchors = [HandAnchor]()
+                
+                if let latestLeftHand = paintingHandTracking.latestLeftHand {
+                    anchors.append(latestLeftHand)
+                }
+                if let latestRightHand = paintingHandTracking.latestRightHand {
+                    anchors.append(latestRightHand)
+                }
+                
+                for anchor in anchors {
+                    guard let handSkeleton = anchor.handSkeleton else { continue }
+                    
+                    let thumbPos = (anchor.originFromAnchorTransform * handSkeleton.joint(.thumbTip).anchorFromJointTransform).translation()
+                    let indexPos = (anchor.originFromAnchorTransform * handSkeleton.joint(.indexFingerTip).anchorFromJointTransform).translation()
+                    
+                    let pinchThreshold: Float = 0.05
+                    if length(thumbPos - indexPos) < pinchThreshold {
+                        lastIndexPose = indexPos
+                    }
+                }
+            }))
+        } attachments: {
+            Attachment(id: "CrayonBoxLabel") {
+                Button () {} label: {
+                    Label("Open the Crayon Box", systemImage: "moon.circle")
+                }
+            }
+            Attachment(id: "PinkCrayonLabel") {
+                Button () {} label: {
+                    Label("Found the Pink Crayon!", systemImage: "moon.circle")
+                }
+            }
+        }
+        
         .gesture(
             DragGesture(minimumDistance: 0)
                 .targetedToAnyEntity()
@@ -135,7 +127,6 @@ struct CombinedRealityView: View {
                                 canvas.addPoint(pos)
                                 print("💕 Hold frame count: \(holdFrameCount)")
                             }
-                            
                         }
                     }
                 }
@@ -155,7 +146,6 @@ struct CombinedRealityView: View {
                 root.removeChild(visualization.entity)
             }
             objectVisualizations.removeAll()
-            
             appState.didLeaveImmersiveSpace()
         }
         
