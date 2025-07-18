@@ -19,6 +19,7 @@ struct CombinedRealityView: View {
     
     // Object Tracking
     @State private var objectVisualizations: [UUID: ObjectAnchorVisualization] = [:]
+    @State private var isPinkCrayonDetected = false
     
     // Painting
     var paintingHandTracking = PaintingHandTracking()
@@ -29,6 +30,8 @@ struct CombinedRealityView: View {
     @State private var isPinchInRange = false
     @State private var holdFrameCount = 0
     let holdFrameTreshold = 7
+    @State private var releaseFrameCount = 0
+    let releaseFrameThreshold = 5
     
     // Overlay  UI
     @State private var showPrompt = false
@@ -62,6 +65,11 @@ struct CombinedRealityView: View {
                             print("Anchor transform for \(anchor.referenceObject.name):")
                             print(anchor.originFromAnchorTransform)
                             
+                            if anchor.referenceObject.name == "PinkCrayon" {
+                                isPinkCrayonDetected = true
+                                print("🎨 Pink crayon detected. drawing unlocked")
+                            }
+                            
                             let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
                             let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
                             self.objectVisualizations[id] = visualization
@@ -76,6 +84,11 @@ struct CombinedRealityView: View {
                             objectVisualizations[id]?.update(with: anchor)
                             
                         case .removed:
+//                            if anchor.referenceObject.name == "PinkCrayon" {
+//                                    isPinkCrayonDetected = false
+//                                    print("Pink crayon removed → drawing disabled")
+//                                }
+                            
                             objectVisualizations[id]?.entity.removeFromParent()
                             objectVisualizations.removeValue(forKey: id)
                         }
@@ -101,24 +114,24 @@ struct CombinedRealityView: View {
                         let indexPos = (anchor.originFromAnchorTransform * handSkeleton.joint(.indexFingerTip).anchorFromJointTransform).translation()
                         let middlePos = (anchor.originFromAnchorTransform * handSkeleton.joint(.middleFingerTip).anchorFromJointTransform).translation()
                         
-                        // finger curl positions
-                        let middleBasePos = (anchor.originFromAnchorTransform * handSkeleton.joint(.middleFingerMetacarpal).anchorFromJointTransform).translation()
-                        let middleTipVector = middlePos - middleBasePos
-                        let middleDirection = normalize(middleTipVector)
-                        let palmNormal = SIMD3<Float>(0, 1, 0)  // upward, adjust if needed
-                        let angle = acos(dot(middleDirection, palmNormal))
-                        
-                        // curl thresholds
-                        let maxMiddleCurlAngle: Float = .pi / 4  // 45 degrees
-                        let isMiddleExtended = angle > maxMiddleCurlAngle
+//                        // finger curl positions
+//                        let middleBasePos = (anchor.originFromAnchorTransform * handSkeleton.joint(.middleFingerMetacarpal).anchorFromJointTransform).translation()
+//                        let middleTipVector = middlePos - middleBasePos
+//                        let middleDirection = normalize(middleTipVector)
+//                        let palmNormal = SIMD3<Float>(0, 1, 0)  // upward, adjust if needed
+//                        let angle = acos(dot(middleDirection, palmNormal))
+//                        
+//                        // curl thresholds
+//                        let maxMiddleCurlAngle: Float = .pi / 4  // 45 degrees
+//                        let isMiddleExtended = angle > maxMiddleCurlAngle
                         
                         // thresholds in meters
 //                        let minPinchThreshold: Float = 0.015
 //                        let maxPinchThreshold: Float = 0.03
                         let minThumbIndex: Float = 0.005
                         let maxThumbIndex: Float = 0.022
-                        let maxThumbMiddle: Float = 0.045
-                        let maxIndexMiddle: Float = 0.045
+                        let maxThumbMiddle: Float = 0.06
+                        let maxIndexMiddle: Float = 0.06
                         
                         // calculate the distances
 //                        let pinchDistance = length(thumbPos - indexPos)
@@ -134,35 +147,73 @@ struct CombinedRealityView: View {
                         
                         // Define gesture conditions
                             let isPinch = (thumbIndexDistance > minThumbIndex) && (thumbIndexDistance < maxThumbIndex)
-                            let isHoldCrayon = isPinch &&
-                                           (thumbMiddleDistance < maxThumbMiddle) &&
-                                           (indexMiddleDistance < maxIndexMiddle) &&
-                                           isMiddleExtended
 //                            let isHoldCrayon = isPinch &&
-//                                               (thumbMiddleDistance < maxThumbMiddle) &&
-//                                               (indexMiddleDistance < maxIndexMiddle)
-                        
-                        if isHoldCrayon {
-                            holdFrameCount += 1
-                            print("\(timestamp) Hold frame count: \(holdFrameCount)")
-                            if holdFrameCount >= holdFrameTreshold {
-                                lastIndexPose = indexPos
-                                isPinchInRange = true
-                                print("\(timestamp) Holding crayon detected, drawing ON \(holdFrameCount)")
+//                                           (thumbMiddleDistance < maxThumbMiddle) &&
+//                                           (indexMiddleDistance < maxIndexMiddle) &&
+//                                           isMiddleExtended
+                            let isHoldCrayon = isPinch &&
+                                               (thumbMiddleDistance < maxThumbMiddle) &&
+                                               (indexMiddleDistance < maxIndexMiddle)
+
+                        if isPinkCrayonDetected {
+                            if isHoldCrayon {
+                                holdFrameCount += 1
+                                releaseFrameCount = 0  // reset release counter
+                                print("\(timestamp) 💕 Holding crayon detected, drawing ON (\(holdFrameCount))")
+
+                                print("\(timestamp) Hold frame count: \(holdFrameCount)")
+                                if holdFrameCount >= holdFrameTreshold {
+                                    lastIndexPose = indexPos
+                                    isPinchInRange = true
+                                    print("\(timestamp) ✅ Holding crayon detected, drawing ON (\(holdFrameCount))")
+                                }
+
+                            } else {
+                                if isPinchInRange {
+                                    releaseFrameCount += 1
+                                    print("\(timestamp) Release frame count: \(releaseFrameCount)")
+                                    if releaseFrameCount >= releaseFrameThreshold {
+                                        holdFrameCount = 0
+                                        isPinchInRange = false
+                                        lastIndexPose = nil
+                                        print("\(timestamp) 🛑 Released → drawing OFF")
+                                    }
+                                } else {
+                                    holdFrameCount = 0
+                                    isPinchInRange = false
+                                    lastIndexPose = nil
+                                    print("\(timestamp) ❌ No recognized gesture, drawing OFF")
+                                }
                             }
-                            
-                               
-                           } else if isPinch {
-                               isPinchInRange = false
-                               lastIndexPose = nil
-                               print("\(timestamp)Just pinch (no crayon hold), drawing OFF")
-                           } else {
-                               holdFrameCount = 0
-                               isPinchInRange = false
-                               lastIndexPose = nil
-                               print("\(timestamp)No recognized gesture, drawing OFF")
-                           }
-                        
+                        }
+
+//                        if isPinkCrayonDetected {
+//                            if isHoldCrayon {
+//                                holdFrameCount += 1
+//                                releaseFrameCount = 0
+//                                print("\(timestamp) Hold frame count: \(holdFrameCount)")
+//                                if holdFrameCount >= holdFrameTreshold {
+//                                    lastIndexPose = indexPos
+//                                    isPinchInRange = true
+//                                    print("\(timestamp) Holding crayon detected, drawing ON \(holdFrameCount)")
+//                                }
+//                                
+//                                   
+//                               } else if isPinch {
+//                                   holdFrameCount = 0
+//                                   releaseFrameCount = 0
+//                                   isPinchInRange = false
+//                                   lastIndexPose = nil
+//                                   print("\(timestamp)Just pinch (no crayon hold), drawing OFF")
+//                               } else {
+//                                   holdFrameCount = 0
+//                                   releaseFrameCount = 0
+//                                   isPinchInRange = false
+//                                   lastIndexPose = nil
+//                                   print("\(timestamp)No recognized gesture, drawing OFF")
+//                               }
+//
+//                        }
                         // crayon detected. should be a holding a crayon kind of pinch not a pinch
 //                        if (pinchDistance > minPinchThreshold) && (pinchDistance < maxPinchThreshold) &&
 //                            (thumbMiddleDistance < maxThumbMiddle) && (indexMiddleDistance < maxIndexMiddle)
