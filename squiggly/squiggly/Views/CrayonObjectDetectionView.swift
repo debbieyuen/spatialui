@@ -150,6 +150,7 @@ struct CrayonObjectDetectionView: View {
     
     @MainActor
     var referenceObjectList: some View {
+
         NavigationSplitView {
             VStack(alignment: .leading) {
                 List(selection: $selectedReferenceObjectID) {

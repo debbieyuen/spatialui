@@ -16,6 +16,7 @@ struct squigglyApp: App {
     
     var body: some Scene {
             WindowGroup {
+//                CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: UIIdentifier.immersiveSpace)
                 ContentView(
                     appState: appState,
                     immersiveSpaceIdentifier: UIIdentifier.immersiveSpace
