@@ -75,6 +75,12 @@
 			path = "../spatialui-assets/Packages";
 			sourceTree = SOURCE_ROOT;
 		};
+		8C8CF16B2E2B000300091409 /* MNIST */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = MNIST;
+			path = "../spatialui-ml/MNIST";
+			sourceTree = SOURCE_ROOT;
+		};
 		8CF94F712E22E6FC00D8A74E /* FastViT-T8 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			name = "FastViT-T8";
@@ -120,6 +126,7 @@
 				8C7C8F742E15F69B00340DA2 /* squigglyTests */,
 				8C1800442E1B589C00E2BC3F /* Frameworks */,
 				8C7C8F602E15F69A00340DA2 /* Products */,
+				8C8CF16B2E2B000300091409 /* MNIST */,
 				8CF94F712E22E6FC00D8A74E /* FastViT-T8 */,
 			);
 			sourceTree = "<group>";
@@ -152,6 +159,7 @@
 				8C6CB3062E2743B800130EB4 /* Reference Objects */,
 				8C7C8F612E15F69A00340DA2 /* squiggly */,
 				8C8CF1642E2AF36900091409 /* Packages */,
+				8C8CF16B2E2B000300091409 /* MNIST */,
 				8CF94F712E22E6FC00D8A74E /* FastViT-T8 */,
 			);
 			name = squiggly;

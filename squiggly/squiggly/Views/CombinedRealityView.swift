@@ -33,6 +33,10 @@ struct CombinedRealityView: View {
     // Overlay  UI
     @State private var showPrompt = false
     
+    // Photo Classification
+    @State private var drawingClassifier = DrawingClassifier()
+    @State private var predictedDigit: String?
+    
     var body: some View {
         RealityView { content, attachments in
             content.add(root)
@@ -60,6 +64,8 @@ struct CombinedRealityView: View {
                         if objectName == "Crayon Box_full_ObjectMaskOn" {
                             print("📦 Crayon Box detected")
                             if let attachment = attachments.entity(for: "CrayonBoxLabel") {
+                                // Change its location so it is above the object
+                                attachment.position = [0, 0.15, 0]
                                 visualization.entity.addChild(attachment)
                             }
                         } else if objectName == "PinkCrayon" {
@@ -104,9 +110,53 @@ struct CombinedRealityView: View {
             }))
         } attachments: {
             Attachment(id: "CrayonBoxLabel") {
-                Button () {} label: {
-                    Label("Open the Crayon Box", systemImage: "moon.circle")
-                }
+                // Overlay button and optional result
+                        VStack {
+                            Text("Open the crayon box and find the pink crayon! Then start drawing numbers!")
+                            HStack {
+                                Button("Classify") {
+                                    if let snapshot = canvas.snapshotImage() {
+                                        if let digit = drawingClassifier.classify(drawingImage: snapshot) {
+                                            predictedDigit = digit
+                                            print("🧠 Predicted digit: \(digit)")
+                                        } else {
+                                            print("⚠️ Could not classify drawing")
+                                        }
+                                    } else {
+                                        print("⚠️ Could not take snapshot of canvas")
+                                    }
+                                }
+                                Button () {} label: {
+                                    Label("Photos", systemImage: "moon.circle")
+                                }
+                                Button () {} label: {
+                                    Label("Erase!", systemImage: "moon.circle")
+                                }
+                            }
+//                            Button("Classify") {
+//                                if let snapshot = canvas.snapshotImage() {
+//                                    if let digit = drawingClassifier.classify(drawingImage: snapshot) {
+//                                        predictedDigit = digit
+//                                        print("🧠 Predicted digit: \(digit)")
+//                                    } else {
+//                                        print("⚠️ Could not classify drawing")
+//                                    }
+//                                } else {
+//                                    print("⚠️ Could not take snapshot of canvas")
+//                                }
+//                            }
+//                            .padding()
+//                            .background(Color.white.opacity(0.8))
+//                            .cornerRadius(10)
+                            
+                            if let predictedDigit {
+                                Text("Predicted digit: \(predictedDigit)")
+                                    .font(.title)
+                                    .padding()
+                                    .background(Color.yellow.opacity(0.8))
+                                    .cornerRadius(10)
+                            }
+                        }
             }
             Attachment(id: "PinkCrayonLabel") {
                 Button () {} label: {
@@ -148,6 +198,7 @@ struct CombinedRealityView: View {
             objectVisualizations.removeAll()
             appState.didLeaveImmersiveSpace()
         }
+        
         
     }
 }

@@ -21,6 +21,9 @@ class PaintingCanvas {
     
     /// The distance for the box that extends in the negative direction.
     let small: Float = 1E-2
+    
+    /// Create allStrokes
+    var allStrokes: [Stroke] = []
 
     // Sets up the painting canvas with six collision boxes that stack on each other.
     init() {
@@ -77,6 +80,9 @@ class PaintingCanvas {
     /// Clear the stroke when the drag gesture ends.
     func finishStroke() {
         if let stroke = currentStroke {
+            // Append Stroke
+            allStrokes.append(stroke)
+            
             // Trigger the update mesh operation.
             stroke.updateMesh()
 
