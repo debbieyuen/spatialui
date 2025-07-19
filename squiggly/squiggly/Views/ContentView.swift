@@ -47,13 +47,25 @@ struct ContentView: View {
         TabView {
             PhotoClassificationView()
                 .tabItem {
-                    Label("List", systemImage: "checklist")
+                    Label("Photos", systemImage: "photo.on.rectangle")
                 }
             
 //            Text("Favorites")
             CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier)
                 .tabItem {
-                    Label("Favorites", systemImage: "star")
+                    Label("Objects", systemImage: "arkit")
+                }
+            Text("Draw")
+                .tabItem {
+                    Label("Draw", systemImage: "pencil.tip")
+                }
+            Text("Erase")
+                .tabItem {
+                    Label("Erase", systemImage: "eraser")
+                }
+            Text("Color Palette")
+                .tabItem {
+                    Label("Color Palette", systemImage: "paintpalette")
                 }
         }
         .task {
