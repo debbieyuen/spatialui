@@ -23,6 +23,9 @@ struct CrayonObjectDetectionView: View {
     @State private var fileImporterIsOpen = false
     
     @State var selectedReferenceObjectID: ReferenceObject.ID?
+    
+    // Picking Colors
+    @State private var selectedColor: Color = .pink
 
     var body: some View {
         Group {
@@ -42,6 +45,7 @@ struct CrayonObjectDetectionView: View {
                 if appState.canEnterImmersiveSpace {
                     VStack {
                         if !appState.isImmersiveSpaceOpened {
+                            ColorPicker("", selection: $selectedColor)
                             Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {

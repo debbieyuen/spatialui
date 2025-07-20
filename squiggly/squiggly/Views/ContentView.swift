@@ -25,7 +25,7 @@ struct ContentView: View {
         TabView {
             AboutView()
                 .tabItem {
-                    Label("Photos", systemImage: "info.circle")
+                    Label("Welcome", systemImage: "info.circle")
                 }
             PhotoClassificationView()
                 .tabItem {
@@ -37,17 +37,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Objects", systemImage: "arkit")
                 }
-            Text("Draw")
+//            Text("Draw")
+            DrawView()
                 .tabItem {
                     Label("Draw", systemImage: "paintpalette")
-                }
-            Text("GitHub")
-                .tabItem {
-                    Label("GitHub", systemImage: "chevron.left.slash.chevron.right")
-                }
-            Text("Website")
-                .tabItem {
-                    Label("Website", systemImage: "safari")
                 }
         }
         .task {

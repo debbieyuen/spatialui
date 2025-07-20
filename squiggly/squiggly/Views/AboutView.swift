@@ -9,6 +9,9 @@ import SwiftUI
 
 struct AboutView: View {
     var body: some View {
+//        Spacer()
+                    
+                    
 
             ZStack(alignment: .topLeading) {
                 
@@ -25,6 +28,10 @@ struct AboutView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .padding(40)
+                    
+                    topButton(title: "Course Website", url: "https://theapplevisionpro.vercel.app")
+                    topButton(title: "GitHub Repo", url: "https://github.com/debbieyuen/spatialui")
+                    
                     
                     // Right Side
                     //                            VStack {

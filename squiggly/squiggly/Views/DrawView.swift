@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct DrawView: View {
+    @State private var selectedColor: Color = .pink
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            ColorPicker("Pick a color", selection: $selectedColor)
     }
 }
 

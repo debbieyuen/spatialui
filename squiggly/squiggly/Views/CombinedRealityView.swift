@@ -37,6 +37,9 @@ struct CombinedRealityView: View {
     @State private var drawingClassifier = DrawingClassifier()
     @State private var predictedDigit: String?
     
+    // Picking Colors
+    @State private var selectedColor: Color = .pink
+    
     var body: some View {
         RealityView { content, attachments in
             content.add(root)
@@ -126,9 +129,7 @@ struct CombinedRealityView: View {
                                         print("⚠️ Could not take snapshot of canvas")
                                     }
                                 }
-                                Button () {} label: {
-                                    Label("Photos", systemImage: "moon.circle")
-                                }
+                                ColorPicker("Pick a color", selection: $selectedColor)
                                 Button () {} label: {
                                     Label("Erase!", systemImage: "moon.circle")
                                 }
