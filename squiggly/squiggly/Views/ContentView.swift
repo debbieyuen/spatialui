@@ -45,6 +45,10 @@ struct ContentView: View {
         }
         .padding(20)
         TabView {
+            AboutView()
+                .tabItem {
+                    Label("Photos", systemImage: "info.circle")
+                }
             PhotoClassificationView()
                 .tabItem {
                     Label("Photos", systemImage: "photo.on.rectangle")
