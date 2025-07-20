@@ -22,28 +22,6 @@ struct ContentView: View {
     let immersiveSpaceIdentifier: String
 
     var body: some View {
-        // Header
-        HStack {
-            // Left Header
-            HStack {
-                Image("yourLogoAssetName")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .clipShape(Circle())
-                
-                Text("Squiggly App")
-                    .font(.headline)
-                    .foregroundColor(.white)
-            }
-            Spacer()
-            
-            // Right Header
-            HStack {
-                topButton(title: "Course Website", url: "https://theapplevisionpro.vercel.app")
-                topButton(title: "GitHub Repo", url: "https://github.com/debbieyuen/spatialui")
-            }
-        }
-        .padding(20)
         TabView {
             AboutView()
                 .tabItem {
@@ -61,15 +39,15 @@ struct ContentView: View {
                 }
             Text("Draw")
                 .tabItem {
-                    Label("Draw", systemImage: "pencil.tip")
+                    Label("Draw", systemImage: "paintpalette")
                 }
-            Text("Erase")
+            Text("GitHub")
                 .tabItem {
-                    Label("Erase", systemImage: "eraser")
+                    Label("GitHub", systemImage: "chevron.left.slash.chevron.right")
                 }
-            Text("Color Palette")
+            Text("Website")
                 .tabItem {
-                    Label("Color Palette", systemImage: "paintpalette")
+                    Label("Website", systemImage: "safari")
                 }
         }
         .task {
