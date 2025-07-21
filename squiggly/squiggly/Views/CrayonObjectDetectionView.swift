@@ -9,23 +9,26 @@ import SwiftUI
 import ARKit
 import RealityKit
 import UniformTypeIdentifiers
+import Combine
 
 struct CrayonObjectDetectionView: View {
     @Bindable var appState: AppState
     let immersiveSpaceIdentifier: String
+    
+    // Get the Painting Canvas for resetting
+    @Binding var selectedColor: Color
     
     let referenceObjectUTType = UTType("com.apple.arkit.referenceobject")!
 
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @Environment(\.scenePhase) private var scenePhase
-    
+    @State private var selectedReferenceObjectID: ReferenceObject.ID?
     @State private var fileImporterIsOpen = false
     
-    @State var selectedReferenceObjectID: ReferenceObject.ID?
-    
     // Picking Colors
-    @State private var selectedColor: Color = .pink
+    @State private var userSelectedColor: Color = .pink
+    var canvas: PaintingCanvas
 
     var body: some View {
         Group {
@@ -45,7 +48,7 @@ struct CrayonObjectDetectionView: View {
                 if appState.canEnterImmersiveSpace {
                     VStack {
                         if !appState.isImmersiveSpaceOpened {
-                            ColorPicker("", selection: $selectedColor)
+                            // Start tracking the 3D Objects
                             Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
@@ -62,6 +65,15 @@ struct CrayonObjectDetectionView: View {
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
                         } else {
+                            // Change the color of the pencils by selection
+                            ColorPicker("", selection: $userSelectedColor)
+                            
+                            // Reset the canvas or erase all
+                            Button {
+                                canvas.clearAll()
+                            } label: {
+                                Label("Reset Canvas", systemImage: "trash")
+                            }
                             Button("Stop Tracking") {
                                 Task {
                                     await dismissImmersiveSpace()

@@ -9,12 +9,12 @@ import SwiftUI
 import RealityKit
 
 /// A class that stores each stroke and generates a mesh, in real time, from a person's gesture movement.
-class PaintingCanvas {
+class PaintingCanvas: ObservableObject {
     /// The main root entity for the painting canvas.
     let root = Entity()
 
     /// The stroke that a person creates.
-    var currentStroke: Stroke?
+    @Published var currentStroke: Stroke?
 
     /// The distance for the box that extends in the positive direction.
     let big: Float = 1E2
@@ -23,7 +23,7 @@ class PaintingCanvas {
     let small: Float = 1E-2
     
     /// Create allStrokes
-    var allStrokes: [Stroke] = []
+    @Published var allStrokes: [Stroke] = []
 
     // Sets up the painting canvas with six collision boxes that stack on each other.
     init() {
@@ -63,6 +63,7 @@ class PaintingCanvas {
 
             // Add the stroke to the root.
             root.addChild(currentStroke!.entity)
+            print("➕ Added stroke entity to root: \(currentStroke!.entity)")
         }
 
         // Check whether the length between the current hand position and the previous point meets the threshold.
@@ -75,6 +76,36 @@ class PaintingCanvas {
 
         // Update the current stroke mesh.
         currentStroke?.updateMesh()
+    }
+    
+    // Clear all the painting strokes
+    func clearAll() {
+        print("Root has \(root.children.count) children before clearAll()")
+
+        // Remove only stroke entities, skip collision boxes
+        for child in root.children {
+            if child.name.starts(with: "Stroke_") {
+                root.removeChild(child)
+                print("After removal, root has \(root.children.count) children")
+            }
+        }
+
+        // Also reset current stroke and list
+        currentStroke = nil
+        allStrokes.removeAll()
+    }
+    
+
+
+    
+    // Use Eraser to manually remove sections
+    func eraser(around position: SIMD3<Float>, radius: Float) {
+        for i in allStrokes.indices {
+            allStrokes[i].points.removeAll { point in
+                length(point - position) < radius
+            }
+            allStrokes[i].updateMesh()
+        }
     }
 
     /// Clear the stroke when the drag gesture ends.

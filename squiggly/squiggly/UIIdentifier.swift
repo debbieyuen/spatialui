@@ -9,7 +9,7 @@ import Foundation
 
 // Define for immersive spaces
 enum UIIdentifier {
-    static let paintingScene = "PaintingScene"
+//    static let paintingScene = "PaintingScene"
     static let immersiveSpace = "Object tracking"
-    static let combinedSpace = "DrawObject"
+//    static let combinedSpace = "DrawObject"
 }

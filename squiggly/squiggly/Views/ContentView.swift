@@ -20,6 +20,9 @@ struct ContentView: View {
 //    private let immersiveSpaceIdentifier = UIIdentifier.immersiveSpace
     @Bindable var appState: AppState
     let immersiveSpaceIdentifier: String
+    @State private var selectedColor: Color = .pink
+    var canvas: PaintingCanvas
+
 
     var body: some View {
         
@@ -34,7 +37,7 @@ struct ContentView: View {
                 }
             
 //            Text("Favorites")
-            CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier)
+            CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier, selectedColor: $selectedColor, canvas: canvas)
                 .tabItem {
                     Label("Objects", systemImage: "arkit")
                 }
@@ -87,6 +90,7 @@ struct ContentView: View {
 }
 
 #Preview(windowStyle: .automatic) {
-    ContentView(appState: AppState(), immersiveSpaceIdentifier: UIIdentifier.immersiveSpace)
+    ContentView(appState: AppState(), immersiveSpaceIdentifier: UIIdentifier.immersiveSpace, canvas: PaintingCanvas())
 }
+
 

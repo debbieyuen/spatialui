@@ -23,7 +23,7 @@ struct CombinedRealityView: View {
     
     // Painting
     var paintingHandTracking = PaintingHandTracking()
-    @State var canvas = PaintingCanvas()
+    @ObservedObject var canvas: PaintingCanvas
     @State var lastIndexPose: SIMD3<Float>?
     
     // Hold Crayon and factor out random pinches
@@ -129,10 +129,10 @@ struct CombinedRealityView: View {
                                         print("⚠️ Could not take snapshot of canvas")
                                     }
                                 }
-                                ColorPicker("Pick a color", selection: $selectedColor)
-                                Button () {} label: {
-                                    Label("Erase!", systemImage: "moon.circle")
-                                }
+//                                ColorPicker("Pick a color", selection: $selectedColor)
+//                                Button () {} label: {
+//                                    Label("Erase!", systemImage: "moon.circle")
+//                                }
                             }
 //                            Button("Classify") {
 //                                if let snapshot = canvas.snapshotImage() {

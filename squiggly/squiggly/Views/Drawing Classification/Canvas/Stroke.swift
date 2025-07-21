@@ -12,6 +12,12 @@ import RealityKit
 struct Stroke {
     /// The stroke that represents the stroke.
     var entity = Entity()
+    
+    // When you create a new stroke entity add a name
+    init() {
+        self.entity = Entity()
+        self.entity.name = "Stroke_\(UUID().uuidString.prefix(8))"
+    }
 
     /// The collection of points in 3D space that represent the stroke.
     var points: [SIMD3<Float>] = []
