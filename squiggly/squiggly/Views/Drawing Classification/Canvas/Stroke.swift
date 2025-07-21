@@ -14,14 +14,18 @@ struct Stroke {
     var entity = Entity()
     
     // When you create a new stroke entity add a name
-    init() {
+    init(color: Color = .white) {
         self.entity = Entity()
         self.entity.name = "Stroke_\(UUID().uuidString.prefix(8))"
+        self.color = color
     }
 
     /// The collection of points in 3D space that represent the stroke.
     var points: [SIMD3<Float>] = []
 
+    // Add Color for strokes. Default is white
+    var color: Color = .white
+    
     /// The maximum radius of the stroke.
     let maxRadius: Float = 1E-2
 
@@ -65,6 +69,13 @@ struct Stroke {
                 print("Error generating mesh")
                 return
             }
+            
+            // Apply the stroke's color
+                    let material = SimpleMaterial(
+                        color: UIColor(self.color),
+                        roughness: 1.0,
+                        isMetallic: false
+                    )
 
             // Set the model component to the new mesh, and assign a simple material.
             entity.components.set(ModelComponent(

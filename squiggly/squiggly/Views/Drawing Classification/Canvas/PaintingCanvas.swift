@@ -15,6 +15,7 @@ class PaintingCanvas: ObservableObject {
 
     /// The stroke that a person creates.
     @Published var currentStroke: Stroke?
+    @Published var selectedColor: Color = .white
 
     /// The distance for the box that extends in the positive direction.
     let big: Float = 1E2
@@ -59,7 +60,8 @@ class PaintingCanvas: ObservableObject {
 
         // Start a new stroke if no stroke exists.
         if currentStroke == nil {
-            currentStroke = Stroke()
+            // Pass in current color
+            currentStroke = Stroke(color: selectedColor)
 
             // Add the stroke to the root.
             root.addChild(currentStroke!.entity)

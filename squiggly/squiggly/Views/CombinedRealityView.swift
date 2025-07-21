@@ -73,6 +73,7 @@ struct CombinedRealityView: View {
                             }
                         } else if objectName == "PinkCrayon" {
                             print("🖍️ Pink Crayon detected — drawing unlocked")
+                            canvas.selectedColor = .pink
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
                                 visualization.entity.addChild(attachment)
