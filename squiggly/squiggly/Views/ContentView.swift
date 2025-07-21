@@ -22,6 +22,7 @@ struct ContentView: View {
     let immersiveSpaceIdentifier: String
 
     var body: some View {
+        
         TabView {
             AboutView()
                 .tabItem {
@@ -48,6 +49,40 @@ struct ContentView: View {
                 await appState.referenceObjectLoader.loadBuiltInReferenceObjects()
             }
         }
+        .ornament(attachmentAnchor: .scene(.top)) {
+            HStack(spacing: 64) {
+                // GitHub button
+                Button {
+                    if let url = URL(string: "https://github.com/debbieyuen/spatialui") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "chevron.left.slash.chevron.right")
+                        Text("GitHub")
+                            .font(.caption2)
+                    }
+                }
+                
+                // Website button
+                Button {
+                    if let url = URL(string: "https://theapplevisionpro.vercel.app") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "safari")
+                        Text("Website")
+                            .font(.caption2)
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(12)
+            .glassBackgroundEffect()
+            .buttonStyle(.plain)
+        }
+
     }
 }
 
