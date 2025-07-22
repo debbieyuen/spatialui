@@ -80,7 +80,7 @@ struct Stroke {
             // Set the model component to the new mesh, and assign a simple material.
             entity.components.set(ModelComponent(
                 mesh: mesh,
-                materials: [SimpleMaterial(color: .white, roughness: 1.0, isMetallic: false)]
+                materials: [material]
             ))
 
             // Set the entity's transform and position.

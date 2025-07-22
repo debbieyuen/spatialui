@@ -61,7 +61,7 @@ class PaintingCanvas: ObservableObject {
         // Start a new stroke if no stroke exists.
         if currentStroke == nil {
             // Pass in current color
-            currentStroke = Stroke(color: selectedColor)
+            currentStroke = Stroke(color: self.selectedColor)
 
             // Add the stroke to the root.
             root.addChild(currentStroke!.entity)
