@@ -27,7 +27,7 @@ struct CrayonObjectDetectionView: View {
     @State private var fileImporterIsOpen = false
     
     // Picking Colors
-    @State private var userSelectedColor: Color = .pink
+//    @State private var userSelectedColor: Color = .pink
     var canvas: PaintingCanvas
 
     var body: some View {
@@ -66,7 +66,7 @@ struct CrayonObjectDetectionView: View {
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
                         } else {
                             // Change the color of the pencils by selection
-                            ColorPicker("", selection: $userSelectedColor)
+//                            ColorPicker("", selection: $userSelectedColor)
                             
                             // Reset the canvas or erase all
                             Button {
