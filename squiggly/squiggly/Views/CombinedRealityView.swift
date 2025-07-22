@@ -39,9 +39,10 @@ struct CombinedRealityView: View {
     
     // Picking Colors
     @State private var selectedColor: Color = .pink
+    @State private var userSelectedColor: Color = .pink
     
     // Wrist Anchoring
-//    @State private var leftWristAnchor = AnchorEntity(.hand(.left, location: .wrist))
+    @State private var leftWristAnchor = AnchorEntity(.hand(.left, location: .wrist))
     
     var body: some View {
         RealityView { content, attachments in
@@ -50,14 +51,14 @@ struct CombinedRealityView: View {
             // Add painting canvas
             root.addChild(canvas.root)
             
-            // Add left wrist palette anchor
-//            content.add(leftWristAnchor)
-//            
-//            if let wristUI = attachments.entity(for: "WristPalette") {
-//                wristUI.components[BillboardComponent.self] = .init()
-//                wristUI.position = [0, 0, 0.05]  // float slightly above wrist
-//                leftWristAnchor.addChild(wristUI)
-//            }
+             // Add left wrist palette anchor
+            content.add(leftWristAnchor)
+            
+            if let wristUI = attachments.entity(for: "WristPalette") {
+                wristUI.components[BillboardComponent.self] = .init()
+                wristUI.position = [0, 0, 0.08]  // float slightly above wrist
+                leftWristAnchor.addChild(wristUI)
+            }
             
             // Object Tracking Task
             Task {
@@ -150,18 +151,14 @@ struct CombinedRealityView: View {
                                     if let snapshot = canvas.snapshotImage() {
                                         if let digit = drawingClassifier.classify(drawingImage: snapshot) {
                                             predictedDigit = digit
-                                            print("🧠 Predicted digit: \(digit)")
+                                            print("Predicted digit: \(digit)")
                                         } else {
-                                            print("⚠️ Could not classify drawing")
+                                            print("Could not classify drawing")
                                         }
                                     } else {
-                                        print("⚠️ Could not take snapshot of canvas")
+                                        print("Could not take snapshot of canvas")
                                     }
                                 }
-//                                ColorPicker("Pick a color", selection: $selectedColor)
-//                                Button () {} label: {
-//                                    Label("Erase!", systemImage: "moon.circle")
-//                                }
                             }
                             if let predictedDigit {
                                 Text("Predicted digit: \(predictedDigit)")
@@ -177,6 +174,10 @@ struct CombinedRealityView: View {
                     Label("Found the Pink Crayon!", systemImage: "moon.circle")
                 }
             }
+            Attachment(id: "WristPalette") {
+                LeftUIPaletteView(canvas: canvas)
+            }
+
         }
         
         .gesture(

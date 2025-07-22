@@ -69,11 +69,11 @@ struct CrayonObjectDetectionView: View {
 //                            ColorPicker("", selection: $userSelectedColor)
                             
                             // Reset the canvas or erase all
-                            Button {
-                                canvas.clearAll()
-                            } label: {
-                                Label("Reset Canvas", systemImage: "trash")
-                            }
+//                            Button {
+//                                canvas.clearAll()
+//                            } label: {
+//                                Label("Eraser", systemImage: "eraser.fill")
+//                            }
                             Button("Stop Tracking") {
                                 Task {
                                     await dismissImmersiveSpace()
@@ -119,7 +119,7 @@ struct CrayonObjectDetectionView: View {
             }
         }
         .onChange(of: scenePhase, initial: true) {
-            print("HomeView scene phase: \(scenePhase)")
+            print("CrayonObjectDetectionView scene phase: \(scenePhase)")
             if scenePhase == .active {
                 Task {
                     // When returning from the background, check if the authorization has changed.
