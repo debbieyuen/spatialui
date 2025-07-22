@@ -21,9 +21,26 @@ This application can only be run on an Apple Vision Pro with visionOS 2.0 and hi
 Install [XCode beta](https://developer.apple.com/support/install-beta/) (Version 26.0 beta 2) and visionOS beta. You will need to be running macOS Sonoma (version 14.0 or later).
 <img width="1052" alt="Screenshot 2025-07-06 at 5 02 26 PM" src="https://github.com/user-attachments/assets/35808960-6607-497e-b0d9-97f7596c51e5" />
 
-Clone the repository
+Install GitLFS
+```
+git install lfs
+```
+
+Fork the repository and then clone the forked repository
 ```bash
 $ git clone https://github.com/debbieyuen/spatialui.git
+```
+
+Update submodule folders  to retrieve ML and Reality Composer files
+```
+git pull --recurse-submodules
+git submodule update --init --recursive
+```
+
+Pull all LFS objects
+```
+git lfs pull
+git submodule foreach 'git lfs pull'
 ```
 
 Retrieve your **Access Token** for your app from [this page](https://huggingface.co/docs/hub/en/security-tokens). In your terminal, add your token to your environment variables.
