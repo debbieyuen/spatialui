@@ -53,6 +53,7 @@ struct AboutView: View {
                             entity.position.x -= 0.03   // move left 0.1 meters (negative X is left)
                             entity.position.z -= 0.1
                             content.add(entity)
+                            rotatingIntroAnimation(entity: entity)
                         }
                     }
                 }
