@@ -40,12 +40,24 @@ struct CombinedRealityView: View {
     // Picking Colors
     @State private var selectedColor: Color = .pink
     
+    // Wrist Anchoring
+    @State private var leftWristAnchor = AnchorEntity(.hand(.left, location: .wrist))
+    
     var body: some View {
         RealityView { content, attachments in
             content.add(root)
             
             // Add painting canvas
             root.addChild(canvas.root)
+            
+            // Add left wrist palette anchor
+            content.add(leftWristAnchor)
+            
+            if let wristUI = attachments.entity(for: "WristPalette") {
+                wristUI.components[BillboardComponent.self] = .init()
+                wristUI.position = [0, 0, 0.05]  // float slightly above wrist
+                leftWristAnchor.addChild(wristUI)
+            }
             
             // Object Tracking Task
             Task {
@@ -64,7 +76,7 @@ struct CombinedRealityView: View {
                         self.objectVisualizations[id] = visualization
                         root.addChild(visualization.entity)
                         // Attach specific UI based on the object
-                        if objectName == "Crayon Box_full_ObjectMaskOn" {
+                        if objectName == "Crayonbox 3_raw_ObjectMaskOn" {
                             print("📦 Crayon Box detected")
                             if let attachment = attachments.entity(for: "CrayonBoxLabel") {
                                 // Change its location so it is above the object
@@ -77,7 +89,7 @@ struct CombinedRealityView: View {
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
                                 visualization.entity.addChild(attachment)
-                                objectAttachmentHelper(to: attachment, relativeTo: root)
+                               
                             }
                         } else if objectName == "RedCrayon" {
                             print("🖍️ Red Crayon detected — drawing unlocked")
@@ -164,6 +176,28 @@ struct CombinedRealityView: View {
                     Label("Found the Pink Crayon!", systemImage: "moon.circle")
                 }
             }
+            Attachment(id: "WristPalette") {
+                HStack(spacing: 8) {
+                    Button(action: {
+                        print("– button pressed")
+                        // put your scaler -= 0.1 logic here
+                    }) {
+                        Image(systemName: "minus.circle.fill")
+                            .font(.title2)
+                    }
+
+                    Button(action: {
+                        print("+ button pressed")
+                        // put your scaler += 0.1 logic here
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                    }
+                }
+                .padding(6)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+            }
+
         }
         
         .gesture(
