@@ -77,7 +77,7 @@ struct CombinedRealityView: View {
                         self.objectVisualizations[id] = visualization
                         root.addChild(visualization.entity)
                         // Attach specific UI based on the object
-                        if objectName == "Crayon Box_full_ObjectMaskOn" {
+                        if objectName == "Crayonbox 3_raw_ObjectMaskOn" {
                             print("📦 Crayon Box detected")
                             if let attachment = attachments.entity(for: "CrayonBoxLabel") {
                                 // Change its location so it is above the object
@@ -145,7 +145,7 @@ struct CombinedRealityView: View {
             Attachment(id: "CrayonBoxLabel") {
                 // Overlay button and optional result
                         VStack {
-                            Text("Open the crayon box and find the pink crayon! Then start drawing numbers!")
+                            Text("Open and Draw!")
                             HStack {
                                 Button("Classify") {
                                     if let snapshot = canvas.snapshotImage() {
