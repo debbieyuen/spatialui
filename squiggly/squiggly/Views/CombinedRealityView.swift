@@ -77,9 +77,17 @@ struct CombinedRealityView: View {
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
                                 visualization.entity.addChild(attachment)
+                                objectAttachmentHelper(to: attachment, relativeTo: root)
                             }
                         } else if objectName == "RedCrayon" {
                             print("🖍️ Red Crayon detected — drawing unlocked")
+                            canvas.selectedColor = .red
+                            isPinkCrayonDetected = true
+                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
+                                visualization.entity.addChild(attachment)
+                            }
+                        } else if objectName == "GreenCrayon" {
+                            print("🍏 Green Crayon detected — drawing unlocked")
                             canvas.selectedColor = .red
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
@@ -142,22 +150,6 @@ struct CombinedRealityView: View {
 //                                    Label("Erase!", systemImage: "moon.circle")
 //                                }
                             }
-//                            Button("Classify") {
-//                                if let snapshot = canvas.snapshotImage() {
-//                                    if let digit = drawingClassifier.classify(drawingImage: snapshot) {
-//                                        predictedDigit = digit
-//                                        print("🧠 Predicted digit: \(digit)")
-//                                    } else {
-//                                        print("⚠️ Could not classify drawing")
-//                                    }
-//                                } else {
-//                                    print("⚠️ Could not take snapshot of canvas")
-//                                }
-//                            }
-//                            .padding()
-//                            .background(Color.white.opacity(0.8))
-//                            .cornerRadius(10)
-                            
                             if let predictedDigit {
                                 Text("Predicted digit: \(predictedDigit)")
                                     .font(.title)
