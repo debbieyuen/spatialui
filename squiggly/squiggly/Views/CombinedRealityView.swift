@@ -72,8 +72,15 @@ struct CombinedRealityView: View {
                                 visualization.entity.addChild(attachment)
                             }
                         } else if objectName == "PinkCrayon" {
-                            print("🖍️ Pink Crayon detected — drawing unlocked")
-                            canvas.selectedColor = .pink
+                            print("🌸 Pink Crayon detected — drawing unlocked")
+                            canvas.selectedColor = Color(red: 1.0, green: 0.6196, blue: 0.9765)
+                            isPinkCrayonDetected = true
+                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
+                                visualization.entity.addChild(attachment)
+                            }
+                        } else if objectName == "RedCrayon" {
+                            print("🖍️ Red Crayon detected — drawing unlocked")
+                            canvas.selectedColor = .red
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
                                 visualization.entity.addChild(attachment)

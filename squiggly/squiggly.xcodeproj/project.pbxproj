@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8C1800462E1B589C00E2BC3F /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C1800452E1B589C00E2BC3F /* Vision.framework */; };
 		8C7C8F652E15F69A00340DA2 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 8C7C8F642E15F69A00340DA2 /* RealityKitContent */; };
+		8CF1D18D2E2F550900BCCB3B /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF1D18C2E2F550900BCCB3B /* Collections */; };
+		8CF1D20B2E2F5C8700BCCB3B /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF1D20A2E2F5C8700BCCB3B /* Algorithms */; };
+		8CF1D2ED2E2F62ED00BCCB3B /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF1D2EC2E2F62ED00BCCB3B /* Numerics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,8 +97,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CF1D20B2E2F5C8700BCCB3B /* Algorithms in Frameworks */,
+				8CF1D18D2E2F550900BCCB3B /* Collections in Frameworks */,
 				8C1800462E1B589C00E2BC3F /* Vision.framework in Frameworks */,
 				8C7C8F652E15F69A00340DA2 /* RealityKitContent in Frameworks */,
+				8CF1D2ED2E2F62ED00BCCB3B /* Numerics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +171,9 @@
 			name = squiggly;
 			packageProductDependencies = (
 				8C7C8F642E15F69A00340DA2 /* RealityKitContent */,
+				8CF1D18C2E2F550900BCCB3B /* Collections */,
+				8CF1D20A2E2F5C8700BCCB3B /* Algorithms */,
+				8CF1D2EC2E2F62ED00BCCB3B /* Numerics */,
 			);
 			productName = squiggly;
 			productReference = 8C7C8F5F2E15F69A00340DA2 /* squiggly.app */;
@@ -222,6 +231,9 @@
 			mainGroup = 8C7C8F562E15F69A00340DA2;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				8CF1D18B2E2F550900BCCB3B /* XCRemoteSwiftPackageReference "swift-collections" */,
+				8CF1D2092E2F5C8700BCCB3B /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				8CF1D2EB2E2F62ED00BCCB3B /* XCRemoteSwiftPackageReference "swift-numerics" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8C7C8F602E15F69A00340DA2 /* Products */;
@@ -532,10 +544,52 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		8CF1D18B2E2F550900BCCB3B /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+		8CF1D2092E2F5C8700BCCB3B /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
+		8CF1D2EB2E2F62ED00BCCB3B /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		8C7C8F642E15F69A00340DA2 /* RealityKitContent */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RealityKitContent;
+		};
+		8CF1D18C2E2F550900BCCB3B /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CF1D18B2E2F550900BCCB3B /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		8CF1D20A2E2F5C8700BCCB3B /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CF1D2092E2F5C8700BCCB3B /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		8CF1D2EC2E2F62ED00BCCB3B /* Numerics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8CF1D2EB2E2F62ED00BCCB3B /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = Numerics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
