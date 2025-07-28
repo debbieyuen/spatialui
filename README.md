@@ -1,6 +1,6 @@
 # Squiggly 🎨
 
-Introducing Squiggly! Squiggly is a visionOS 2 application that explores drawing with physical utensils (crayons, pens, markers, and brushes) in immersive spaces. It is developed with RealityKit and SwiftUI in addition to machine learning frameworks. This research prototype explores spatial user interfaces (UI) and graphics for 3D environments. 
+Introducing Squiggly! Squiggly is a visionOS 2 application that explores drawing with physical utensils (crayons, pens, markers, and brushes) in immersive spaces. It is developed with RealityKit and SwiftUI in addition to the machine learning frameworks: BERT-SQuD, MNIST, and Apple's Vision Framework. This research prototype explores spatial user interfaces (UI) and graphics for 3D environments. 
 
 The physical objects, including crayon boxes (new box, broken box, condensed box), the individual crayon colors (yellow, blue, purple, orange, red, green, and pink), a stuffed Pokémon plushie, another 3D objects are trained on 3D models and collections of images before importing to CreateML. 
 <img width="1052" alt="Screenshot 2025-07-19 at 6 34 54 PM" src="https://github.com/user-attachments/assets/52d40c3c-0ebc-4703-bffb-bc3c5f677c8c" />
