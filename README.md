@@ -6,6 +6,8 @@ The physical objects, including crayon boxes (new box, broken box, condensed box
 <img width="1052" alt="Screenshot 2025-07-19 at 6 34 54 PM" src="https://github.com/user-attachments/assets/52d40c3c-0ebc-4703-bffb-bc3c5f677c8c" />
 <img width="1052" alt="Screenshot 2025-07-19 at 6 30 22 PM" src="https://github.com/user-attachments/assets/1b48b0d6-7711-488c-99fb-215768542dc5" />
 <img width="1052" alt="IMG_0041" src="https://github.com/user-attachments/assets/8541f51a-f84d-46ab-9b7e-6572943e1562" />
+<img width="1052" height="1080" alt="IMG_0091" src="https://github.com/user-attachments/assets/8e3b3ff7-8c4b-49cc-ac64-4b22d4e6db70" />
+<img width="1052" height="1080" alt="IMG_0075" src="https://github.com/user-attachments/assets/84917d9f-2fe9-46e5-a6e9-4bd34592b8dd" />
 
 
 ## Requirements 
