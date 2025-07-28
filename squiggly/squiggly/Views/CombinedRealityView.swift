@@ -78,14 +78,14 @@ struct CombinedRealityView: View {
                         root.addChild(visualization.entity)
                         // Attach specific UI based on the object
                         if objectName == "Crayonbox 3_raw_ObjectMaskOn" {
-                            print("📦 Crayon Box detected")
+                            print("Crayon Box detected")
                             if let attachment = attachments.entity(for: "CrayonBoxLabel") {
                                 // Change its location so it is above the object
                                 attachment.position = [0, 0.15, 0]
                                 visualization.entity.addChild(attachment)
                             }
                         } else if objectName == "PinkCrayon" {
-                            print("🌸 Pink Crayon detected — drawing unlocked")
+                            print("Pink Crayon detected — drawing unlocked")
                             canvas.selectedColor = Color(red: 1.0, green: 0.6196, blue: 0.9765)
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
@@ -94,14 +94,14 @@ struct CombinedRealityView: View {
                             }
                         }
                         else if objectName == "RedCrayon" {
-                            print("🖍️ Red Crayon detected — drawing unlocked")
+                            print("Red Crayon detected — drawing unlocked")
                             canvas.selectedColor = .red
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
                                 visualization.entity.addChild(attachment)
                             }
                         } else if objectName == "GreenCrayon" {
-                            print("🍏 Green Crayon detected — drawing unlocked")
+                            print("Green Crayon detected — drawing unlocked")
                             canvas.selectedColor = .green
                             isPinkCrayonDetected = true
                             if let attachment = attachments.entity(for: "PinkCrayonLabel") {
@@ -180,6 +180,21 @@ struct CombinedRealityView: View {
 
         }
         
+        // Create a task for the remote reference objects from Hugging Face
+        .task {
+            // Loading only the remote Hugging Face crayons
+            for remoteName in ["PurpleCrayon", "BlueCrayon", "OrangeCrayon"] {
+                if !appState.referenceObjectLoader.referenceObjects.contains(where: { $0.name == remoteName }) {
+                    do {
+                        try await appState.referenceObjectLoader.loadReferenceObject(named: remoteName)
+                        print("Loaded remote object \(remoteName)")
+                    } catch {
+                        print("Failed to load \(remoteName): \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+        
         .gesture(
             DragGesture(minimumDistance: 0)
                 .targetedToAnyEntity()
@@ -187,10 +202,10 @@ struct CombinedRealityView: View {
                     if let pos = lastIndexPose {
                         if isPinkCrayonDetected {
                             holdFrameCount += 1
-                            print("❤️ First Hold frame count: \(holdFrameCount)")
+                            print("First Hold frame count: \(holdFrameCount)")
                             if holdFrameCount >= holdFrameTreshold {
                                 canvas.addPoint(pos)
-                                print("💕 Hold frame count: \(holdFrameCount)")
+                                print("Hold frame count: \(holdFrameCount)")
                             }
                         }
                     }
