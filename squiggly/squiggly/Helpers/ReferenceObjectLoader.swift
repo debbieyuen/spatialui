@@ -27,9 +27,6 @@ final class ReferenceObjectLoader {
     
     var didFinishLoading: Bool { progress >= 1.0 }
     
-    // remote objects from Hugging Face Makerspace Model
-    let remoteObjectNames: Set<String> = ["PurpleCrayon", "BlueCrayon", "OrangeCrayon"]
-    
     private func finishedOneFile() {
         filesLoaded += 1
         updateProgress()
@@ -72,7 +69,6 @@ final class ReferenceObjectLoader {
         }
     }
     
-    // Loads the Object whether it be local or remotely
     private func loadReferenceObject(_ url: URL) async {
         var referenceObject: ReferenceObject
         do {
@@ -125,35 +121,4 @@ final class ReferenceObjectLoader {
         })
         fileCount = referenceObjects.count
     }
-    
-    // Where to load the objects from - remotely or locally
-    func loadReferenceObject(named name: String) async throws {
-        let url: URL
-
-        if remoteObjectNames.contains(name) {
-            guard let remoteURL = URL(string: "https://huggingface.co/debbieyuen/makerspace/resolve/main/crayons/\(name).referenceobject") else {
-                print("Invalid remote URL for \(name)")
-                return
-            }
-
-            do {
-                let (data, _) = try await URLSession.shared.data(from: remoteURL)
-                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(name).referenceobject")
-                try data.write(to: tempURL)
-                url = tempURL
-            } catch {
-                print("Failed to download remote object \(name): \(error)")
-                return
-            }
-        } else {
-            guard let localURL = Bundle.main.url(forResource: name, withExtension: "referenceobject", subdirectory: "Reference Objects") else {
-                print("Failed to find local object \(name)")
-                return
-            }
-            url = localURL
-        }
-
-        await loadReferenceObject(url)
-    }
-
 }

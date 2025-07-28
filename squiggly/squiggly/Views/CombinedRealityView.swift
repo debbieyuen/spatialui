@@ -29,7 +29,7 @@ struct CombinedRealityView: View {
     // Hold Crayon and factor out random pinches
     @State private var holdFrameCount = 0
     let holdFrameTreshold = 7
-    //hi
+
     // Overlay  UI
     @State private var showPrompt = false
     
@@ -40,6 +40,7 @@ struct CombinedRealityView: View {
     // Picking Colors
     @State private var selectedColor: Color = .pink
     @State private var userSelectedColor: Color = .pink
+    @State private var currentCrayonName: String? = nil
     
     // Wrist Anchoring
     @State private var leftWristAnchor = AnchorEntity(.hand(.left, location: .wrist))
@@ -72,48 +73,102 @@ struct CombinedRealityView: View {
                     
                     switch anchorUpdate.event {
                     case .added:
+                        // Skip detection if a crayon is already active
+                        if let active = currentCrayonName,
+                               ["PinkCrayon", "RedCrayon", "GreenCrayon"].contains(objectName),
+                               objectName != active {
+                                print("⚠️ \(objectName) detected but \(active) is still active — ignoring.")
+                                break
+                            }
+                        
                         let model = appState.referenceObjectLoader.usdzsPerReferenceObjectID[anchor.referenceObject.id]
                         let visualization = ObjectAnchorVisualization(for: anchor, withModel: model)
                         self.objectVisualizations[id] = visualization
                         root.addChild(visualization.entity)
                         // Attach specific UI based on the object
-                        if objectName == "Crayonbox 3_raw_ObjectMaskOn" {
+                        switch objectName {
+                        case "Crayonbox 3_raw_ObjectMaskOn":
                             print("Crayon Box detected")
                             if let attachment = attachments.entity(for: "CrayonBoxLabel") {
-                                // Change its location so it is above the object
                                 attachment.position = [0, 0.15, 0]
                                 visualization.entity.addChild(attachment)
                             }
-                        } else if objectName == "PinkCrayon" {
-                            print("Pink Crayon detected — drawing unlocked")
-                            canvas.selectedColor = Color(red: 1.0, green: 0.6196, blue: 0.9765)
-                            isPinkCrayonDetected = true
-                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
-                                visualization.entity.addChild(attachment)
-                               
+
+                        case "PinkCrayon", "RedCrayon", "GreenCrayon":
+                       
+                            let color: Color
+                            let labelID = "PinkCrayonLabel"  // Reuse the same label attachment for all crayons
+                            let attachment = attachments.entity(for: labelID)
+
+                            switch objectName {
+                            case "PinkCrayon":
+                                color = Color(red: 1.0, green: 0.6196, blue: 0.9765)
+                            case "RedCrayon":
+                                color = .red
+                            case "GreenCrayon":
+                                color = .green
+                            default:
+                                color = .gray // fallback
                             }
+
+                            currentCrayonColor(
+                                name: objectName,
+                                color: color,
+                                labelID: labelID,
+                                attachment: attachment,
+                                visualization: visualization
+                            )
+
+                        default:
+                            break
                         }
-                        else if objectName == "RedCrayon" {
-                            print("Red Crayon detected — drawing unlocked")
-                            canvas.selectedColor = .red
-                            isPinkCrayonDetected = true
-                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
-                                visualization.entity.addChild(attachment)
-                            }
-                        } else if objectName == "GreenCrayon" {
-                            print("Green Crayon detected — drawing unlocked")
-                            canvas.selectedColor = .green
-                            isPinkCrayonDetected = true
-                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
-                                visualization.entity.addChild(attachment)
-                            }
-                        }
+//                        if objectName == "Crayonbox 3_raw_ObjectMaskOn" {
+//                            print("Crayon Box detected")
+//                            if let attachment = attachments.entity(for: "CrayonBoxLabel") {
+//                                // Change its location so it is above the object
+//                                attachment.position = [0, 0.15, 0]
+//                                visualization.entity.addChild(attachment)
+//                            }
+//                        } else if objectName == "PinkCrayon" && currentCrayonName == nil {
+//                            print("Pink Crayon detected — drawing unlocked")
+//                            canvas.selectedColor = Color(red: 1.0, green: 0.6196, blue: 0.9765)
+//                            isPinkCrayonDetected = true
+//                            currentCrayonName = "PinkCrayon"
+//                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
+//                                visualization.entity.addChild(attachment)
+//                               
+//                            }
+//                        }
+//                        else if objectName == "RedCrayon" && currentCrayonName == nil {
+//                            print("Red Crayon detected — drawing unlocked")
+//                            canvas.selectedColor = .red
+////                            isPinkCrayonDetected = true
+//                            currentCrayonName = "RedCrayon"
+//                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
+//                                visualization.entity.addChild(attachment)
+//                            }
+//                        } else if objectName == "GreenCrayon" {
+//                            print("Green Crayon detected — drawing unlocked")
+//                            canvas.selectedColor = .green
+////                            isPinkCrayonDetected = true
+//                            currentCrayonName = "GreenCrayon"
+//                            
+//                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
+//                                visualization.entity.addChild(attachment)
+//                            }
+//                        }
                     case .updated:
                         objectVisualizations[id]?.update(with: anchor)
                         
                     case .removed:
                         objectVisualizations[id]?.entity.removeFromParent()
                         objectVisualizations.removeValue(forKey: id)
+                        // Reset crayon name
+                        if anchor.referenceObject.name == currentCrayonName {
+                                print("Crayon \(currentCrayonName!) removed — resetting lock")
+                                currentCrayonName = nil
+                                isPinkCrayonDetected = false
+                            }
                     }
                 }
             }
@@ -179,22 +234,6 @@ struct CombinedRealityView: View {
             }
 
         }
-        
-        // Create a task for the remote reference objects from Hugging Face
-        .task {
-            // Loading only the remote Hugging Face crayons
-            for remoteName in ["PurpleCrayon", "BlueCrayon", "OrangeCrayon"] {
-                if !appState.referenceObjectLoader.referenceObjects.contains(where: { $0.name == remoteName }) {
-                    do {
-                        try await appState.referenceObjectLoader.loadReferenceObject(named: remoteName)
-                        print("Loaded remote object \(remoteName)")
-                    } catch {
-                        print("Failed to load \(remoteName): \(error.localizedDescription)")
-                    }
-                }
-            }
-        }
-        
         .gesture(
             DragGesture(minimumDistance: 0)
                 .targetedToAnyEntity()
@@ -229,6 +268,27 @@ struct CombinedRealityView: View {
             appState.didLeaveImmersiveSpace()
         }
         
-        
     }
+    func currentCrayonColor(name: String, color: Color, labelID: String, attachment: Entity?, visualization: ObjectAnchorVisualization) {
+           guard currentCrayonName == nil else { return }
+
+           print("\(name) detected — drawing unlocked")
+           canvas.selectedColor = color
+           isPinkCrayonDetected = true
+        currentCrayonName = name
+
+           if let attachment = attachment {
+               attachment.name = labelID
+               visualization.entity.addChild(attachment)
+           }
+
+           DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+               if currentCrayonName == name {
+                   print("\(name) timeout expired — unlocking")
+                   currentCrayonName = nil
+                   isPinkCrayonDetected = false
+               }
+           }
+       }
+    
 }
