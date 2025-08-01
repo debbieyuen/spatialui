@@ -9,6 +9,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct LeftUIPaletteView: View {
     @State private var userSelectedColor: Color = .pink

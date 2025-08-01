@@ -18,6 +18,9 @@ struct CrayonObjectDetectionView: View {
     // Get the Painting Canvas for resetting
     @Binding var selectedColor: Color
     
+    // Share the json and images
+    @State private var lastExportedJSONURL: URL?
+    
     let referenceObjectUTType = UTType("com.apple.arkit.referenceobject")!
 
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -74,6 +77,8 @@ struct CrayonObjectDetectionView: View {
 //                            } label: {
 //                                Label("Eraser", systemImage: "eraser.fill")
 //                            }
+                            // Export drawing strokes as json
+                        
                             Button("Stop Tracking") {
                                 Task {
                                     await dismissImmersiveSpace()
@@ -168,6 +173,15 @@ struct CrayonObjectDetectionView: View {
     var referenceObjectList: some View {
 
         NavigationSplitView {
+            Button("Export As JSON") {
+                if let fileURL = canvas.exportStrokesToJSONFile() {
+                    print("JSON saved to: \(fileURL)")
+                    shareImmediately(url: fileURL)
+                } else {
+                    print("JSON export failed.")
+                }
+            }
+            
             VStack(alignment: .leading) {
                 List(selection: $selectedReferenceObjectID) {
                     ForEach(appState.referenceObjectLoader.referenceObjects, id: \.id) { referenceObject in
@@ -220,6 +234,39 @@ struct CrayonObjectDetectionView: View {
             }
         }
     }
+    
+    
+    func shareImmediately(url: URL) {
+        // Copy to temp to avoid sandbox issues
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
+
+        do {
+            if FileManager.default.fileExists(atPath: tempURL.path) {
+                try FileManager.default.removeItem(at: tempURL)
+            }
+            try FileManager.default.copyItem(at: url, to: tempURL)
+        } catch {
+            print("Failed to copy file to temporary folder: \(error)")
+            return
+        }
+
+        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+        // Set popover source for visionOS
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = scene.windows.first?.rootViewController {
+            
+            if let popover = activityVC.popoverPresentationController {
+                popover.sourceView = rootVC.view
+                popover.sourceRect = CGRect(x: rootVC.view.bounds.midX, y: rootVC.view.bounds.midY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
+
+            rootVC.present(activityVC, animated: true)
+        }
+    }
+
+
 }
 
 //#Preview {

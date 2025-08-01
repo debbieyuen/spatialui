@@ -77,7 +77,7 @@ struct CombinedRealityView: View {
                         if let active = currentCrayonName,
                                ["PinkCrayon", "RedCrayon", "GreenCrayon"].contains(objectName),
                                objectName != active {
-                                print("⚠️ \(objectName) detected but \(active) is still active — ignoring.")
+                                print("\(objectName) detected but \(active) is still active — ignoring.")
                                 break
                             }
                         
@@ -122,41 +122,6 @@ struct CombinedRealityView: View {
                         default:
                             break
                         }
-//                        if objectName == "Crayonbox 3_raw_ObjectMaskOn" {
-//                            print("Crayon Box detected")
-//                            if let attachment = attachments.entity(for: "CrayonBoxLabel") {
-//                                // Change its location so it is above the object
-//                                attachment.position = [0, 0.15, 0]
-//                                visualization.entity.addChild(attachment)
-//                            }
-//                        } else if objectName == "PinkCrayon" && currentCrayonName == nil {
-//                            print("Pink Crayon detected — drawing unlocked")
-//                            canvas.selectedColor = Color(red: 1.0, green: 0.6196, blue: 0.9765)
-//                            isPinkCrayonDetected = true
-//                            currentCrayonName = "PinkCrayon"
-//                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
-//                                visualization.entity.addChild(attachment)
-//                               
-//                            }
-//                        }
-//                        else if objectName == "RedCrayon" && currentCrayonName == nil {
-//                            print("Red Crayon detected — drawing unlocked")
-//                            canvas.selectedColor = .red
-////                            isPinkCrayonDetected = true
-//                            currentCrayonName = "RedCrayon"
-//                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
-//                                visualization.entity.addChild(attachment)
-//                            }
-//                        } else if objectName == "GreenCrayon" {
-//                            print("Green Crayon detected — drawing unlocked")
-//                            canvas.selectedColor = .green
-////                            isPinkCrayonDetected = true
-//                            currentCrayonName = "GreenCrayon"
-//                            
-//                            if let attachment = attachments.entity(for: "PinkCrayonLabel") {
-//                                visualization.entity.addChild(attachment)
-//                            }
-//                        }
                     case .updated:
                         objectVisualizations[id]?.update(with: anchor)
                         
