@@ -5,12 +5,6 @@
 //  Created by Debbie Yuen on 8/2/25.
 //
 
-//  SnapshotSceneBuilder.swift
-//  squiggly
-//
-//  Created by Debbie Yuen on 8/2/25.
-//
-
 import RealityKit
 
 func strokeSnapshotClone(from strokes: [Stroke]) -> Entity {

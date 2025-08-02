@@ -15,8 +15,9 @@ final class OffscreenRenderModel {
     private let renderer: RealityRenderer
     private let cameraEntity: PerspectiveCamera
     private let colorTexture: MTLTexture
-
-    init(sceneRoot: Entity, size: CGSize = CGSize(width: 512, height: 512)) throws {
+    
+    // 512 was giving slightly pixelated results
+    init(sceneRoot: Entity, size: CGSize = CGSize(width: 640, height: 640)) throws {
         // Initialize renderer
         renderer = try RealityRenderer()
 

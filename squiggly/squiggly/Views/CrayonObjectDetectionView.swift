@@ -21,6 +21,10 @@ struct CrayonObjectDetectionView: View {
     // Share the json and images
     @State private var lastExportedJSONURL: URL?
     
+    // Export the .json and .png files
+    @State private var isExporting = false
+    @State private var exportReady = false
+    
     let referenceObjectUTType = UTType("com.apple.arkit.referenceobject")!
 
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -168,7 +172,9 @@ struct CrayonObjectDetectionView: View {
             // Start monitoring for changes in authorization, in case the settings apps is in the foreground and changes authorizations there.
             await appState.monitorSessionEvents()
         }
-        .sheet(isPresented: $showShareSheet) {
+        .sheet(isPresented: $showShareSheet, onDismiss: {
+            exportReady = false
+        }) {
             ShareSheet(activityItems: shareItems)
         }
     }
@@ -177,32 +183,63 @@ struct CrayonObjectDetectionView: View {
     var referenceObjectList: some View {
 
         NavigationSplitView {
-            
-            Button("Export Drawing + Snapshots") {
-                Task {
-                    var itemsToShare: [URL] = []
-                    
-                    // Export JSON
-                    if let jsonURL = canvas.exportStrokesToJSONFile() {
-                        print("JSON saved to: \(jsonURL)")
-                        itemsToShare.append(jsonURL)
-                    } else {
-                        print("JSON export failed.")
-                    }
-                    
-                    // Capture Snapshots
-//                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root)
-//                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root, allStrokes: canvas.allStrokes)
-                    let snapshotRoot = strokeSnapshotClone(from: canvas.allStrokes)
-                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: snapshotRoot, allStrokes: canvas.allStrokes)
-
-
-                    itemsToShare.append(contentsOf: snapshotURLs)
-                    
-                    // Share all
-                    shareImmediately(urls: itemsToShare)
+            Button(action: {
+                if !isExporting && !exportReady {
+                    prepareShareItems()
+                } else if exportReady {
+                    showShareSheet = true
                 }
+            }) {
+                Group {
+                    if isExporting {
+                        ProgressView()
+                    } else if exportReady {
+                        Text("Share")
+                    } else {
+                        Text("Export")
+                    }
+                }
+                .frame(width: 100, height: 44)
+                .background(Color.accentColor)
+                .foregroundColor(.white)
+                .cornerRadius(8)
             }
+            .disabled(isExporting)
+
+            
+//            Button("Export") {
+//                prepareShareItems()
+//                Task {
+//                    var itemsToShare: [URL] = []
+//                    
+//                    // Export JSON
+//                    if let jsonURL = canvas.exportStrokesToJSONFile() {
+//                        print("JSON saved to: \(jsonURL)")
+//                        itemsToShare.append(jsonURL)
+//                    } else {
+//                        print("JSON export failed.")
+//                    }
+//                    
+//                    // Capture Snapshots
+////                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root)
+////                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root, allStrokes: canvas.allStrokes)
+//                    let snapshotRoot = strokeSnapshotClone(from: canvas.allStrokes)
+//                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: snapshotRoot, allStrokes: canvas.allStrokes)
+//
+//
+////                    itemsToShare.append(contentsOf: snapshotURLs)
+////                    
+////                    // Share all
+////                    shareImmediately(urls: itemsToShare)
+//                    // Delay showing the popup until ready
+//                    itemsToShare.append(contentsOf: snapshotURLs)
+//
+//                    DispatchQueue.main.async {
+//                        shareItems = itemsToShare
+//                        showShareSheet = true
+//                    }
+//                }
+//            }
 
             VStack(alignment: .leading) {
                 List(selection: $selectedReferenceObjectID) {
@@ -261,6 +298,33 @@ struct CrayonObjectDetectionView: View {
         shareItems = urls
         showShareSheet = true
     }
+    
+    func prepareShareItems() {
+        isExporting = true
+        exportReady = false
+        shareItems = []
+
+        Task {
+            var itemsToShare: [Any] = []
+
+            // Export strokes to JSON
+            if let jsonURL = canvas.exportStrokesToJSONFile() {
+                itemsToShare.append(jsonURL)
+            }
+
+            // Clone strokes to snapshot entity and take snapshots
+            let snapshotRoot = strokeSnapshotClone(from: canvas.allStrokes)
+            let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: snapshotRoot, allStrokes: canvas.allStrokes)
+            itemsToShare.append(contentsOf: snapshotURLs)
+
+            await MainActor.run {
+                shareItems = itemsToShare
+                isExporting = false
+                exportReady = true
+            }
+        }
+    }
+
 
 }
 

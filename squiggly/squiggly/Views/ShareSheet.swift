@@ -8,6 +8,8 @@
 import SwiftUI
 import UIKit
 
+// We need this sheet because we want to share multiple files.
+// Apple's native sharesheet shares one file at once. 
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
 
