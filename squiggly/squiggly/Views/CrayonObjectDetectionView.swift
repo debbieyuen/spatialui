@@ -28,6 +28,9 @@ struct CrayonObjectDetectionView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var selectedReferenceObjectID: ReferenceObject.ID?
     @State private var fileImporterIsOpen = false
+    @State private var shareItems: [Any] = []
+    @State private var showShareSheet = false
+
     
     // Picking Colors
 //    @State private var userSelectedColor: Color = .pink
@@ -157,15 +160,16 @@ struct CrayonObjectDetectionView: View {
         })
         .task {
             // Ask for authorization before a person attempts to open the immersive space.
-            // This gives the app opportunity to respond gracefully if authorization isn't granted.
             if appState.allRequiredProvidersAreSupported {
                 await appState.requestWorldSensingAuthorization()
             }
         }
         .task {
-            // Start monitoring for changes in authorization, in case a person brings the
-            // Settings app to the foreground and changes authorizations there.
+            // Start monitoring for changes in authorization, in case the settings apps is in the foreground and changes authorizations there.
             await appState.monitorSessionEvents()
+        }
+        .sheet(isPresented: $showShareSheet) {
+            ShareSheet(activityItems: shareItems)
         }
     }
     
@@ -173,15 +177,30 @@ struct CrayonObjectDetectionView: View {
     var referenceObjectList: some View {
 
         NavigationSplitView {
-            Button("Export As JSON") {
-                if let fileURL = canvas.exportStrokesToJSONFile() {
-                    print("JSON saved to: \(fileURL)")
-                    shareImmediately(url: fileURL)
-                } else {
-                    print("JSON export failed.")
+            
+            Button("Export Drawing + Snapshots") {
+                Task {
+                    var itemsToShare: [URL] = []
+                    
+                    // Export JSON
+                    if let jsonURL = canvas.exportStrokesToJSONFile() {
+                        print("JSON saved to: \(jsonURL)")
+                        itemsToShare.append(jsonURL)
+                    } else {
+                        print("JSON export failed.")
+                    }
+                    
+                    // Capture Snapshots
+//                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root)
+                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root, allStrokes: canvas.allStrokes)
+
+                    itemsToShare.append(contentsOf: snapshotURLs)
+                    
+                    // Share all
+                    shareImmediately(urls: itemsToShare)
                 }
             }
-            
+
             VStack(alignment: .leading) {
                 List(selection: $selectedReferenceObjectID) {
                     ForEach(appState.referenceObjectLoader.referenceObjects, id: \.id) { referenceObject in
@@ -235,37 +254,10 @@ struct CrayonObjectDetectionView: View {
         }
     }
     
-    
-    func shareImmediately(url: URL) {
-        // Copy to temp to avoid sandbox issues
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
-
-        do {
-            if FileManager.default.fileExists(atPath: tempURL.path) {
-                try FileManager.default.removeItem(at: tempURL)
-            }
-            try FileManager.default.copyItem(at: url, to: tempURL)
-        } catch {
-            print("Failed to copy file to temporary folder: \(error)")
-            return
-        }
-
-        let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
-
-        // Set popover source for visionOS
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let rootVC = scene.windows.first?.rootViewController {
-            
-            if let popover = activityVC.popoverPresentationController {
-                popover.sourceView = rootVC.view
-                popover.sourceRect = CGRect(x: rootVC.view.bounds.midX, y: rootVC.view.bounds.midY, width: 0, height: 0)
-                popover.permittedArrowDirections = []
-            }
-
-            rootVC.present(activityVC, animated: true)
-        }
+    func shareImmediately(urls: [URL]) {
+        shareItems = urls
+        showShareSheet = true
     }
-
 
 }
 

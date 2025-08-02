@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 // Converts the strokes into JSON format
-// Simple 3D point struct
+// 3D point struct
 struct Point3D: Codable {
     let x: Float
     let y: Float
