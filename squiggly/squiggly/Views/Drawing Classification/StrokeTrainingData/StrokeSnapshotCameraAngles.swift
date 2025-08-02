@@ -5,13 +5,6 @@
 //  Created by Debbie Yuen on 8/1/25.
 //
 
-//
-//  StrokeSnapshotCameraAngles.swift
-//  squiggly
-//
-//  Created by Debbie Yuen on 8/1/25. Updated with camera framing.
-//
-
 import Foundation
 import RealityKit
 import UIKit
