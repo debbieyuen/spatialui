@@ -192,7 +192,10 @@ struct CrayonObjectDetectionView: View {
                     
                     // Capture Snapshots
 //                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root)
-                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root, allStrokes: canvas.allStrokes)
+//                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root, allStrokes: canvas.allStrokes)
+                    let snapshotRoot = strokeSnapshotClone(from: canvas.allStrokes)
+                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: snapshotRoot, allStrokes: canvas.allStrokes)
+
 
                     itemsToShare.append(contentsOf: snapshotURLs)
                     
