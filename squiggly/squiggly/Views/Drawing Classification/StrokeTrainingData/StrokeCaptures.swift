@@ -41,6 +41,29 @@ final class OffscreenRenderModel {
         )
         desc.usage = [.renderTarget, .shaderRead]
         colorTexture = device.makeTexture(descriptor: desc)!
+        
+        // Inside OffscreenRenderModel.init(sceneRoot: Entity, size: CGSize)
+        renderer.entities.append(sceneRoot)
+
+        // Add directional light to simulate Vision Pro lighting
+        let lightEntity = DirectionalLight()
+        lightEntity.light.intensity = 2000
+        lightEntity.light.color = .white
+        lightEntity.transform.rotation = simd_quatf(angle: .pi / 3, axis: [1, -1, 0])
+        lightEntity.position = [2, 3, 2]
+        renderer.entities.append(lightEntity)
+
+        // Add a soft "shadow" plane below the strokes
+        let shadowMaterial = SimpleMaterial(color: .black.withAlphaComponent(0.1), isMetallic: false)
+        let shadowPlane = ModelEntity(
+            mesh: .generatePlane(width: 3, depth: 3),
+            materials: [shadowMaterial]
+        )
+        shadowPlane.position = [0, -0.01, 0] // Slightly below drawing
+        shadowPlane.orientation = simd_quatf(angle: .pi / 2, axis: [1, 0, 0])
+        renderer.entities.append(shadowPlane)
+
+
     }
     func setCameraTransform(_ transform: Transform) {
         cameraEntity.transform = transform

@@ -3,6 +3,7 @@
 //  squiggly
 //
 //  Created by Debbie Yuen on 7/12/25.
+//  Resource: https://developer.apple.com/videos/play/wwdc2023/10095/
 //
 
 import SwiftUI
