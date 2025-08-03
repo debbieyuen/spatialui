@@ -27,6 +27,9 @@ struct CrayonObjectDetectionView: View {
     @State private var isExporting = false
     @State private var exportReady = false
     
+    // Hide 3D reference objects when overlay is open
+    @State private var isOverlayOpen = false
+
     let referenceObjectUTType = UTType("com.apple.arkit.referenceobject")!
 
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -61,7 +64,7 @@ struct CrayonObjectDetectionView: View {
                     HStack {
                         if !appState.isImmersiveSpaceOpened {
                             // Start tracking the 3D Objects
-                            Button("Start Tracking") {
+                            Button {
 //                            Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
@@ -75,6 +78,8 @@ struct CrayonObjectDetectionView: View {
                                         break
                                     }
                                 }
+                            } label: {
+                                Label("Start", systemImage: "play.fill").foregroundColor(.green)
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
                             
@@ -84,23 +89,25 @@ struct CrayonObjectDetectionView: View {
                             
                             // Reset the canvas or erase all
 //                            Button {
-//                                canvas.clearAll()
-//                            } label: {
-//                                Label("Eraser", systemImage: "eraser.fill")
-//                            }
+                            //                                canvas.clearAll()
+                            //                            } label: {
+                            //                                Label("Eraser", systemImage: "eraser.fill")
+                            //                            }
                             // Export drawing strokes as json
-                        
-                            Button("Stop Tracking") {
+                            
+                            Button {
                                 Task {
                                     await dismissImmersiveSpace()
                                     appState.didLeaveImmersiveSpace()
                                 }
+                            } label: {
+                                Label("Stop", systemImage: "stop.fill").foregroundColor(.red)
                             }
                             
                             if !appState.objectTrackingStartedRunning {
                                 HStack {
                                     ProgressView()
-                                    Text("Please wait until all reference objects have been loaded")
+//                                    Text("Please wait until all reference objects have been loaded")
                                 }
                             }
                             
@@ -118,9 +125,9 @@ struct CrayonObjectDetectionView: View {
                                     if isExporting {
                                         ProgressView()
                                     } else if exportReady {
-                                        Text("Share")
+                                        Label("Share", systemImage: "square.and.arrow.up").foregroundColor(.blue)
                                     } else {
-                                        Text("Export")
+                                        Label("Export", systemImage: "doc.badge.arrow.up")
                                     }
                                 }
                             }
@@ -129,14 +136,6 @@ struct CrayonObjectDetectionView: View {
                             // Color Picker
                             ColorPicker("", selection: $userSelectedColor).frame(width: 44, height: 44)
                         }
-                        
-//                        Text(appState.isImmersiveSpaceOpened ?
-//                             "This leaves the immersive space." :
-//                             "This enters an immersive space, hiding all other apps."
-//                        )
-//                        .foregroundStyle(.secondary)
-//                        .font(.footnote)
-//                        .padding(.horizontal)
                     }
                 }
             }
@@ -212,27 +211,6 @@ struct CrayonObjectDetectionView: View {
     var referenceObjectList: some View {
 
         NavigationSplitView {
-//            Button(action: {
-//                if !isExporting && !exportReady {
-//                    // Capture images with virtual cameras
-//                    prepareShareItems()
-//
-//                } else if exportReady {
-//                    showShareSheet = true
-//                }
-//            }) {
-//                Group {
-//                    if isExporting {
-//                        ProgressView()
-//                    } else if exportReady {
-//                        Text("Share")
-//                    } else {
-//                        Text("Export")
-//                    }
-//                }
-//            }
-//            .disabled(isExporting)
-
             VStack(alignment: .leading) {
                 List(selection: $selectedReferenceObjectID) {
                     ForEach(appState.referenceObjectLoader.referenceObjects, id: \.id) { referenceObject in
@@ -255,7 +233,8 @@ struct CrayonObjectDetectionView: View {
             .padding(.vertical)
             .disabled(appState.isImmersiveSpaceOpened)
             
-        } detail: {
+        }
+        detail: {
             if !appState.referenceObjectLoader.didFinishLoading {
                 VStack {
                     Text("Loading reference objects…")
@@ -284,6 +263,7 @@ struct CrayonObjectDetectionView: View {
                 }
             }
         }
+        
     }
     
     func shareImmediately(urls: [URL]) {
