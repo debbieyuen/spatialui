@@ -186,7 +186,10 @@ struct CrayonObjectDetectionView: View {
         NavigationSplitView {
             Button(action: {
                 if !isExporting && !exportReady {
+                    // Capture images with virtual cameras
                     prepareShareItems()
+                    // Capture Reality snapshot from user's perspective
+//                    captureRealitySnapshot()
                 } else if exportReady {
                     showShareSheet = true
                 }
@@ -325,7 +328,6 @@ struct CrayonObjectDetectionView: View {
             }
         }
     }
-
 
 }
 

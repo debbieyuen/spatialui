@@ -13,11 +13,21 @@ struct Stroke {
     /// The stroke that represents the stroke.
     var entity = Entity()
     
-    // When you create a new stroke entity add a name
-    init(color: Color = .white) {
+    /// Save the tag or name of the stroke/drawing
+    var tag: String = ""
+    
+    /// Save the starting point of the stroke
+    var startPoint: SIMD3<Float>? { points.first }
+
+    /// Save the ending point of the stroke
+    var endPoint: SIMD3<Float>? { points.last }
+    
+    /// When you create a new stroke entity add a name
+    init(color: Color = .white, tag: String = "") {
         self.entity = Entity()
         self.entity.name = "Stroke_\(UUID().uuidString.prefix(8))"
         self.color = color
+        self.tag = tag
     }
 
     /// The collection of points in 3D space that represent the stroke.

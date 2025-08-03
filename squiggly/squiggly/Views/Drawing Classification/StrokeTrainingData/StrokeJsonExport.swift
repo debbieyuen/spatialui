@@ -18,8 +18,11 @@ struct Point3D: Codable {
 
 // Stroke format for export
 struct SerializableStroke: Codable {
-    let color: String // Optional: remove if not needed
+    let color: String
     let points: [Point3D]
+    let tag: String?
+    let startPoint: Point3D?
+    let endPoint: Point3D?
 }
 
 // Export functionality
@@ -28,9 +31,10 @@ extension PaintingCanvas {
         let serializableStrokes = allStrokes.map { stroke in
             SerializableStroke(
                 color: stroke.color.description,
-                points: stroke.points.map {
-                    Point3D(x: $0.x, y: $0.y, z: $0.z)
-                }
+                points: stroke.points.map { Point3D(x: $0.x, y: $0.y, z: $0.z)},
+                tag: stroke.tag,
+                startPoint: stroke.startPoint.map { Point3D(x: $0.x, y: $0.y, z: $0.z) },
+                endPoint: stroke.endPoint.map { Point3D(x: $0.x, y: $0.y, z: $0.z) }
             )
         }
 

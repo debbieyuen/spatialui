@@ -8,6 +8,8 @@
 
 import SwiftUI
 import RealityKit
+import RealityKitContent
+import Spatial
 import ARKit
 
 @MainActor
@@ -46,14 +48,14 @@ struct CombinedRealityView: View {
     @State private var leftWristAnchor = AnchorEntity(.hand(.left, location: .wrist))
     
     var body: some View {
-        RealityView { content, attachments in
-            content.add(root)
+        RealityView { context, attachments in
+            context.add(root)
             
             // Add painting canvas
             root.addChild(canvas.root)
             
              // Add left wrist palette anchor
-            content.add(leftWristAnchor)
+            context.add(leftWristAnchor)
             
             if let wristUI = attachments.entity(for: "WristPalette") {
                 wristUI.components[BillboardComponent.self] = .init()
@@ -161,7 +163,8 @@ struct CombinedRealityView: View {
                     }
                 }
             }))
-        } attachments: {
+        }
+        attachments: {
             Attachment(id: "CrayonBoxLabel") {
                 // Overlay button and optional result
                         VStack {
@@ -255,5 +258,4 @@ struct CombinedRealityView: View {
                }
            }
        }
-    
 }
