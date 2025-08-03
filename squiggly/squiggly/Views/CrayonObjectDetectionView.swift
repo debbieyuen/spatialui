@@ -18,6 +18,7 @@ struct CrayonObjectDetectionView: View {
     
     // Get the Painting Canvas for resetting
     @Binding var selectedColor: Color
+    @State private var userSelectedColor: Color = .pink
     
     // Share the json and images
     @State private var lastExportedJSONURL: URL?
@@ -57,10 +58,11 @@ struct CrayonObjectDetectionView: View {
         .toolbar {
             ToolbarItem(placement: .bottomOrnament) {
                 if appState.canEnterImmersiveSpace {
-                    VStack {
+                    HStack {
                         if !appState.isImmersiveSpaceOpened {
                             // Start tracking the 3D Objects
-                            Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
+                            Button("Start Tracking") {
+//                            Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                     case .opened:
@@ -75,6 +77,7 @@ struct CrayonObjectDetectionView: View {
                                 }
                             }
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
+                            
                         } else {
                             // Change the color of the pencils by selection
 //                            ColorPicker("", selection: $userSelectedColor)
@@ -100,15 +103,40 @@ struct CrayonObjectDetectionView: View {
                                     Text("Please wait until all reference objects have been loaded")
                                 }
                             }
+                            
+                            // Share
+                            Button(action: {
+                                if !isExporting && !exportReady {
+                                    // Capture images with virtual cameras
+                                    prepareShareItems()
+
+                                } else if exportReady {
+                                    showShareSheet = true
+                                }
+                            }) {
+                                Group {
+                                    if isExporting {
+                                        ProgressView()
+                                    } else if exportReady {
+                                        Text("Share")
+                                    } else {
+                                        Text("Export")
+                                    }
+                                }
+                            }
+                            .disabled(isExporting)
+                            
+                            // Color Picker
+                            ColorPicker("", selection: $userSelectedColor).frame(width: 44, height: 44)
                         }
                         
-                        Text(appState.isImmersiveSpaceOpened ?
-                             "This leaves the immersive space." :
-                             "This enters an immersive space, hiding all other apps."
-                        )
-                        .foregroundStyle(.secondary)
-                        .font(.footnote)
-                        .padding(.horizontal)
+//                        Text(appState.isImmersiveSpaceOpened ?
+//                             "This leaves the immersive space." :
+//                             "This enters an immersive space, hiding all other apps."
+//                        )
+//                        .foregroundStyle(.secondary)
+//                        .font(.footnote)
+//                        .padding(.horizontal)
                     }
                 }
             }
@@ -184,66 +212,26 @@ struct CrayonObjectDetectionView: View {
     var referenceObjectList: some View {
 
         NavigationSplitView {
-            Button(action: {
-                if !isExporting && !exportReady {
-                    // Capture images with virtual cameras
-                    prepareShareItems()
-                    // Capture Reality snapshot from user's perspective
-//                    captureRealitySnapshot()
-                } else if exportReady {
-                    showShareSheet = true
-                }
-            }) {
-                Group {
-                    if isExporting {
-                        ProgressView()
-                    } else if exportReady {
-                        Text("Share")
-                    } else {
-                        Text("Export")
-                    }
-                }
-                .frame(width: 100, height: 44)
-                .background(Color.accentColor)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-            }
-            .disabled(isExporting)
-
-            
-//            Button("Export") {
-//                prepareShareItems()
-//                Task {
-//                    var itemsToShare: [URL] = []
-//                    
-//                    // Export JSON
-//                    if let jsonURL = canvas.exportStrokesToJSONFile() {
-//                        print("JSON saved to: \(jsonURL)")
-//                        itemsToShare.append(jsonURL)
+//            Button(action: {
+//                if !isExporting && !exportReady {
+//                    // Capture images with virtual cameras
+//                    prepareShareItems()
+//
+//                } else if exportReady {
+//                    showShareSheet = true
+//                }
+//            }) {
+//                Group {
+//                    if isExporting {
+//                        ProgressView()
+//                    } else if exportReady {
+//                        Text("Share")
 //                    } else {
-//                        print("JSON export failed.")
-//                    }
-//                    
-//                    // Capture Snapshots
-////                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root)
-////                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: canvas.root, allStrokes: canvas.allStrokes)
-//                    let snapshotRoot = strokeSnapshotClone(from: canvas.allStrokes)
-//                    let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: snapshotRoot, allStrokes: canvas.allStrokes)
-//
-//
-////                    itemsToShare.append(contentsOf: snapshotURLs)
-////                    
-////                    // Share all
-////                    shareImmediately(urls: itemsToShare)
-//                    // Delay showing the popup until ready
-//                    itemsToShare.append(contentsOf: snapshotURLs)
-//
-//                    DispatchQueue.main.async {
-//                        shareItems = itemsToShare
-//                        showShareSheet = true
+//                        Text("Export")
 //                    }
 //                }
 //            }
+//            .disabled(isExporting)
 
             VStack(alignment: .leading) {
                 List(selection: $selectedReferenceObjectID) {
