@@ -29,9 +29,9 @@ struct CrayonObjectDetectionView: View {
     
     // Hide 3D reference objects when overlay is open
     @State private var isOverlayOpen = false
-
+    
     let referenceObjectUTType = UTType("com.apple.arkit.referenceobject")!
-
+    
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
     @Environment(\.dismissImmersiveSpace) private var dismissImmersiveSpace
     @Environment(\.scenePhase) private var scenePhase
@@ -39,12 +39,12 @@ struct CrayonObjectDetectionView: View {
     @State private var fileImporterIsOpen = false
     @State private var shareItems: [Any] = []
     @State private var showShareSheet = false
-
+    
     
     // Picking Colors
-//    @State private var userSelectedColor: Color = .pink
+    //    @State private var userSelectedColor: Color = .pink
     var canvas: PaintingCanvas
-
+    
     var body: some View {
         Group {
             if appState.canEnterImmersiveSpace {
@@ -65,7 +65,7 @@ struct CrayonObjectDetectionView: View {
                         if !appState.isImmersiveSpaceOpened {
                             // Start tracking the 3D Objects
                             Button {
-//                            Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
+                                //                            Button("Start Tracking \(appState.referenceObjectLoader.enabledReferenceObjectsCount) Object(s)") {
                                 Task {
                                     switch await openImmersiveSpace(id: immersiveSpaceIdentifier) {
                                     case .opened:
@@ -84,16 +84,6 @@ struct CrayonObjectDetectionView: View {
                             .disabled(!appState.canEnterImmersiveSpace || appState.referenceObjectLoader.enabledReferenceObjectsCount == 0)
                             
                         } else {
-                            // Change the color of the pencils by selection
-//                            ColorPicker("", selection: $userSelectedColor)
-                            
-                            // Reset the canvas or erase all
-//                            Button {
-                            //                                canvas.clearAll()
-                            //                            } label: {
-                            //                                Label("Eraser", systemImage: "eraser.fill")
-                            //                            }
-                            // Export drawing strokes as json
                             
                             Button {
                                 Task {
@@ -104,19 +94,12 @@ struct CrayonObjectDetectionView: View {
                                 Label("Stop", systemImage: "stop.fill").foregroundColor(.red)
                             }
                             
-                            if !appState.objectTrackingStartedRunning {
-                                HStack {
-                                    ProgressView()
-//                                    Text("Please wait until all reference objects have been loaded")
-                                }
-                            }
-                            
                             // Share
                             Button(action: {
                                 if !isExporting && !exportReady {
                                     // Capture images with virtual cameras
                                     prepareShareItems()
-
+                                    
                                 } else if exportReady {
                                     showShareSheet = true
                                 }
@@ -135,6 +118,13 @@ struct CrayonObjectDetectionView: View {
                             
                             // Color Picker
                             ColorPicker("", selection: $userSelectedColor).frame(width: 44, height: 44)
+                            
+                            // Reset the canvas or erase all
+                            Button {
+                                canvas.clearAll()
+                            } label: {
+                                Label("Eraser", systemImage: "eraser.fill")
+                            }
                         }
                     }
                 }
@@ -209,7 +199,7 @@ struct CrayonObjectDetectionView: View {
     
     @MainActor
     var referenceObjectList: some View {
-
+        
         NavigationSplitView {
             VStack(alignment: .leading) {
                 List(selection: $selectedReferenceObjectID) {
@@ -221,7 +211,7 @@ struct CrayonObjectDetectionView: View {
                     }
                 }
                 .navigationTitle("Reference objects")
-
+                
                 Button {
                     fileImporterIsOpen = true
                 } label: {
@@ -275,20 +265,20 @@ struct CrayonObjectDetectionView: View {
         isExporting = true
         exportReady = false
         shareItems = []
-
+        
         Task {
             var itemsToShare: [Any] = []
-
+            
             // Export strokes to JSON
             if let jsonURL = canvas.exportStrokesToJSONFile() {
                 itemsToShare.append(jsonURL)
             }
-
+            
             // Clone strokes to snapshot entity and take snapshots
             let snapshotRoot = strokeSnapshotClone(from: canvas.allStrokes)
             let snapshotURLs = await takeSnapshotsFromMultipleAngles(sceneRoot: snapshotRoot, allStrokes: canvas.allStrokes)
             itemsToShare.append(contentsOf: snapshotURLs)
-
+            
             await MainActor.run {
                 shareItems = itemsToShare
                 isExporting = false
@@ -296,7 +286,7 @@ struct CrayonObjectDetectionView: View {
             }
         }
     }
-
+    
 }
 
 //#Preview {
