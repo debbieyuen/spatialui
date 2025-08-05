@@ -4,6 +4,7 @@
 //
 //  Created by Debbie Yuen on 7/2/25.
 //  ARKit: https://developer.apple.com/documentation/visionOS/setting-up-access-to-arkit-data
+//  Resources: https://www.createwithswift.com/creating-advanced-hover-effects-in-visionos/
 //
 
 import SwiftUI
@@ -65,7 +66,7 @@ struct ContentView: View {
                         Text("GitHub")
                             .font(.caption2)
                     }
-                }
+                }.accessibilityLabel("Close")
                 
                 // Website button
                 Button {
