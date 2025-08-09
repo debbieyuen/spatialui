@@ -24,9 +24,7 @@ struct LeftUIPaletteView: View {
                 Label("Eraser", systemImage: "eraser.fill")
             }
         }
-        //        .padding(6)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
-        //        .padding(2)
     }
 }
 

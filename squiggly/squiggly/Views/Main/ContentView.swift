@@ -15,11 +15,6 @@ import RealityKitContent
 struct ContentView: View {
     // Call openImmersive Space to create a space to run ARKit session
     @Environment(\.openImmersiveSpace) private var openImmersiveSpace
-    // Grab image file for the Vision Framework
-//    @State private var imageFile: ImageFile? = nil
-    // Appstate() for object detection
-//    @State private var appState = AppState()
-//    private let immersiveSpaceIdentifier = UIIdentifier.immersiveSpace
     @Bindable var appState: AppState
     let immersiveSpaceIdentifier: String
     @State private var selectedColor: Color = .pink
@@ -38,12 +33,10 @@ struct ContentView: View {
                     Label("Photos", systemImage: "photo.on.rectangle")
                 }
             
-//            Text("Favorites")
             CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: immersiveSpaceIdentifier, selectedColor: $selectedColor, canvas: canvas)
                 .tabItem {
                     Label("Objects", systemImage: "arkit")
                 }
-//            Text("Draw")
             DrawView()
                 .tabItem {
                     Label("Draw", systemImage: "paintpalette")

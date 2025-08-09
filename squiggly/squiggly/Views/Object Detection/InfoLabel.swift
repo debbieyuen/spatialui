@@ -23,9 +23,9 @@ struct InfoLabel: View {
     @MainActor
     var infoMessage: String? {
         if !appState.allRequiredProvidersAreSupported {
-            return "Sorry, this app requires functionality that isn't supported on this platform."
+            return "This app requires functionality that isn't supported on this platform."
         } else if !appState.allRequiredAuthorizationsAreGranted {
-            return "Sorry, this app is missing necessary authorizations. You can change this in the Privacy & Security settings."
+            return "This app is missing necessary authorizations. You can change this in the Privacy & Security settings."
         }
         return nil
     }

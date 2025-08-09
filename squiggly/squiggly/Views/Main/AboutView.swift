@@ -64,20 +64,6 @@ struct AboutView: View {
     }
 }
 
-//@ViewBuilder
-//func topButton(title: String, url: String) -> some View {
-//    Button(action: {
-//        if let link = URL(string: url) {
-//            UIApplication.shared.open(link)
-//        }
-//    }) {
-//        HStack {
-//            Text(title)
-//            //            Image(systemName: "arrow.right")
-//        }
-//    }
-//}
-
 #Preview {
     AboutView()
 }
