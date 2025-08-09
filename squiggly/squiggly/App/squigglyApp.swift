@@ -13,24 +13,21 @@ struct squigglyApp: App {
     
     // AppState for Object Detection Views
     @State private var appState = AppState()
+    // Immersive Space Object Detection
     @State private var canvas = PaintingCanvas()
     
     var body: some Scene {
-            WindowGroup {
-//                CrayonObjectDetectionView(appState: appState, immersiveSpaceIdentifier: UIIdentifier.immersiveSpace)
-                ContentView(
-                    appState: appState,
-                    immersiveSpaceIdentifier: UIIdentifier.immersiveSpace,
-                    canvas: canvas
-                )
-            }
-//            ImmersiveSpace(id: UIIdentifier.paintingScene) {
-//                PaintingView()
-//            }
-//            
-            ImmersiveSpace(id: UIIdentifier.immersiveSpace) {
-                CombinedRealityView(appState: appState, canvas: canvas)
-            }
+        WindowGroup {
+            ContentView(
+                appState: appState,
+                immersiveSpaceIdentifier: UIIdentifier.immersiveSpace,
+                canvas: canvas
+            )
+        }
+        
+        ImmersiveSpace(id: UIIdentifier.immersiveSpace) {
+            CombinedRealityView(appState: appState, canvas: canvas)
+        }
     }
 }
 

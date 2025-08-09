@@ -114,13 +114,13 @@
 		8C7C8F562E15F69A00340DA2 = {
 			isa = PBXGroup;
 			children = (
-				8C089F812E47DC2A00A787DF /* FastViT-T8 */,
 				8C7C8F612E15F69A00340DA2 /* squiggly */,
 				8C8CF1642E2AF36900091409 /* Packages */,
 				8C7C8F742E15F69B00340DA2 /* squigglyTests */,
 				8C1800442E1B589C00E2BC3F /* Frameworks */,
 				8C7C8F602E15F69A00340DA2 /* Products */,
 				8C089F842E47DC4E00A787DF /* MNIST */,
+				8C089F812E47DC2A00A787DF /* FastViT-T8 */,
 				8C089F8E2E47DD1700A787DF /* Reference Objects */,
 			);
 			sourceTree = "<group>";

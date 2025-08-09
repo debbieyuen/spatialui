@@ -96,7 +96,7 @@ struct CombinedRealityView: View {
                                 visualization.entity.addChild(attachment)
                             }
 
-                        case "PinkCrayon", "RedCrayon", "GreenCrayon":
+                        case "PinkCrayon", "RedCrayon", "GreenCrayon", "BlueCrayon", "YellowCrayon":
                        
                             let color: Color
                             let labelID = "PinkCrayonLabel"  // Reuse the same label attachment for all crayons
@@ -109,6 +109,10 @@ struct CombinedRealityView: View {
                                 color = .red
                             case "GreenCrayon":
                                 color = .green
+                            case "BlueCrayon":
+                                color = .blue
+                            case "YellowCrayon":
+                                color = .yellow
                             default:
                                 color = .gray // fallback
                             }
