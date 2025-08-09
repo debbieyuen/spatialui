@@ -10,6 +10,7 @@ import RealityKit
 import Metal
 import CoreGraphics
 
+// This file is for capturing the drawing strokes 
 @MainActor
 final class OffscreenRenderModel {
     private let renderer: RealityRenderer

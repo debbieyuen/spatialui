@@ -4,3 +4,6 @@
 [submodule "spatialui-assets"]
 	path = spatialui-assets
 	url = https://github.com/debbieyuen/spatialui-assets
+[submodule "squigglyimageclassifier"]
+	path = squigglyimageclassifier
+	url = https://huggingface.co/debbieyuen/squigglyimageclassifier
