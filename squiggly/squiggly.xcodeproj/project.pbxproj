@@ -31,6 +31,27 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8C089EFE2E47C8CD00A787DF /* Exceptions for "MNIST" folder in "squiggly" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MNISTClassifier.mlmodel,
+			);
+			target = 8C7C8F5E2E15F69A00340DA2 /* squiggly */;
+		};
+		8C089EFF2E47C8CD00A787DF /* Exceptions for "Reference Objects" folder in "squiggly" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Apple_Magic_Keyboard.referenceobject,
+				"Crayon Box_full_ObjectMaskOn.referenceobject",
+				"Crayonbox 3_raw_ObjectMaskOn.referenceobject",
+				CrayonBoxBroken2.referenceobject,
+				GreenCrayon.referenceobject,
+				PinkCrayon.referenceobject,
+				"Pokémon.referenceobject",
+				RedCrayon.referenceobject,
+			);
+			target = 8C7C8F5E2E15F69A00340DA2 /* squiggly */;
+		};
 		8C7C8F772E15F69B00340DA2 /* Exceptions for "squiggly" folder in "squiggly" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -50,10 +71,25 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8C6CB3062E2743B800130EB4 /* Reference Objects */ = {
+		8C089EE82E47C8CD00A787DF /* FastViT-T8 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			name = "Reference Objects";
-			path = "../spatialui-ml/Reference Objects";
+			path = "FastViT-T8";
+			sourceTree = SOURCE_ROOT;
+		};
+		8C089EEA2E47C8CD00A787DF /* MNIST */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8C089EFE2E47C8CD00A787DF /* Exceptions for "MNIST" folder in "squiggly" target */,
+			);
+			path = MNIST;
+			sourceTree = SOURCE_ROOT;
+		};
+		8C089EF32E47C8CD00A787DF /* Reference Objects */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8C089EFF2E47C8CD00A787DF /* Exceptions for "Reference Objects" folder in "squiggly" target */,
+			);
+			path = "Reference Objects";
 			sourceTree = SOURCE_ROOT;
 		};
 		8C7C8F612E15F69A00340DA2 /* squiggly */ = {
@@ -76,18 +112,6 @@
 			);
 			name = Packages;
 			path = "../spatialui-assets/Packages";
-			sourceTree = SOURCE_ROOT;
-		};
-		8C8CF16B2E2B000300091409 /* MNIST */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			name = MNIST;
-			path = "../spatialui-ml/MNIST";
-			sourceTree = SOURCE_ROOT;
-		};
-		8CF94F712E22E6FC00D8A74E /* FastViT-T8 */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			name = "FastViT-T8";
-			path = "../spatialui-ml/FastViT-T8";
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -128,12 +152,12 @@
 			children = (
 				8C7C8F612E15F69A00340DA2 /* squiggly */,
 				8C8CF1642E2AF36900091409 /* Packages */,
-				8C6CB3062E2743B800130EB4 /* Reference Objects */,
 				8C7C8F742E15F69B00340DA2 /* squigglyTests */,
 				8C1800442E1B589C00E2BC3F /* Frameworks */,
 				8C7C8F602E15F69A00340DA2 /* Products */,
-				8C8CF16B2E2B000300091409 /* MNIST */,
-				8CF94F712E22E6FC00D8A74E /* FastViT-T8 */,
+				8C089EE82E47C8CD00A787DF /* FastViT-T8 */,
+				8C089EEA2E47C8CD00A787DF /* MNIST */,
+				8C089EF32E47C8CD00A787DF /* Reference Objects */,
 			);
 			sourceTree = "<group>";
 		};
@@ -162,11 +186,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				8C6CB3062E2743B800130EB4 /* Reference Objects */,
+				8C089EE82E47C8CD00A787DF /* FastViT-T8 */,
 				8C7C8F612E15F69A00340DA2 /* squiggly */,
 				8C8CF1642E2AF36900091409 /* Packages */,
-				8C8CF16B2E2B000300091409 /* MNIST */,
-				8CF94F712E22E6FC00D8A74E /* FastViT-T8 */,
 			);
 			name = squiggly;
 			packageProductDependencies = (
